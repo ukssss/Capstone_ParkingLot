@@ -5,12 +5,16 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2085" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1652420043945312" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/activity_main3.xml" value="0.2421875" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/bottom_menu.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_third.xml" value="0.24166666666666667" />
+        <entry key="app/src/main/res/layout/toolbar_main.xml" value="0.2920166015625" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/nav_menu.xml" value="0.2421875" />
         <entry key="app/src/main/res/xml/network_config.xml" value="0.19610507246376813" />
       </map>
     </option>

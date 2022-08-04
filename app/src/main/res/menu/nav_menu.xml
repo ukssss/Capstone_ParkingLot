@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/first_tab"
+        android:title="Map"
+        android:icon="@drawable/map"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/second_tab"
+        android:title="List"
+        android:icon="@drawable/parking"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/third_tab"
+        android:title="Status"
+        android:icon="@drawable/info"
+        app:showAsAction="always" />
+
+</menu>

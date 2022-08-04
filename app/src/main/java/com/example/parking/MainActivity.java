@@ -2,44 +2,59 @@ package com.example.parking;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
+import com.skt.Tmap.TMapView;
+
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirstFragment firstFragment;
-    SecondFragment secondFragment;
-    ThirdFragment thirdFragment;
+    private static final String TAG = "Main_Activity";
+
+    private Context mContext = MainActivity.this;
+    private NavigationView nav;
+
+    String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
+
+    // T Map View
+    TMapView tMapView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firstFragment = new FirstFragment();
-        secondFragment = new SecondFragment();
-        thirdFragment = new ThirdFragment();
+        init();
+        NavigationViewHelper.enableNavigation(mContext, nav);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, firstFragment).commit();
-        BottomNavigationView bottom_navigation = findViewById(R.id.bottom_navigation);
-        bottom_navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.first_tab:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, firstFragment).commit();
-                        return true;
-                    case R.id.second_tab:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, secondFragment).commit();
-                        return true;
-                    case R.id.third_tab:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, thirdFragment).commit();
-                        return true;
-                }
-                return false;
-            }
-        });
+        tMap();
+    }
+
+    private void init(){
+        nav = findViewById(R.id.nav);
+    }
+
+    private void tMap(){
+        // T Map View
+        tMapView = new TMapView(this);
+
+        // API Key
+        tMapView.setSKTMapApiKey(API_Key);
+
+        //Initial Setting
+        tMapView.setZoomLevel(17);
+        tMapView.setIconVisibility(true);
+        tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
+        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
+
+        // T Map View Using Linear Layout
+        LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
+        linearLayoutTmap.addView(tMapView);
     }
 }
