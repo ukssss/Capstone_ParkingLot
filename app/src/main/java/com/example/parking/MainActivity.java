@@ -4,23 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toolbar;
 
+import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
 
     private static final String TAG = "Main_Activity";
 
@@ -29,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView nav;
 
+    // T Map
     String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
-
-    // T Map View
     TMapView tMapView = null;
+    TMapGpsManager tMapGPS = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
         }));
     }
 
-    private void init(){
+    private void init() {
         nav = findViewById(R.id.nav);
     }
 
-    private void tMap(){
+    private void tMap() {
         // T Map View
         tMapView = new TMapView(this);
 
@@ -74,5 +72,29 @@ public class MainActivity extends AppCompatActivity {
         // T Map View Using Linear Layout
         LinearLayout linearLayoutTmap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
         linearLayoutTmap.addView(tMapView);
+
+        // Request For GPS Permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        // GPS Using T Map
+        tMapGPS = new TMapGpsManager(this);
+
+        // Initial Setting
+        tMapGPS.setMinTime(1000);
+        tMapGPS.setMinDistance(10);
+        //tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
+        tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
+
+        tMapGPS.OpenGps();
+
+    }
+
+    @Override
+    public void onLocationChange(Location location) {
+        tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
+        tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
     }
 }
+
