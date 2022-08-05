@@ -1,5 +1,6 @@
 package com.example.parking;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,11 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-
 import android.widget.LinearLayout;
+import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.skt.Tmap.TMapView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,10 +34,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationViewHelper.enableNavigation(mContext, nav);
 
         tMap();
-
     }
 
-    private void init() {
+    private void init(){
         nav = findViewById(R.id.nav);
     }
 

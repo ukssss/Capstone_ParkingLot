@@ -2,19 +2,15 @@ package com.example.parking;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
-import android.media.Image;
 import android.opengl.EGLExt;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toolbar;
 
 import java.sql.Array;
 import java.util.Arrays;
@@ -28,7 +24,6 @@ public class MainActivity2 extends AppCompatActivity {
 
     private Context mContext = MainActivity2.this;
     private NavigationView nav;
-
     private ListView listView;
     private ArrayAdapter arrayAdapter;
 
@@ -51,6 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
         NavigationViewHelper.enableNavigation(mContext, nav);
 
         listView();
+
     }
 
     private void init(){
