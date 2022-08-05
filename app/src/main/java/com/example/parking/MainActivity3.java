@@ -33,7 +33,8 @@ public class MainActivity3 extends AppCompatActivity {
         NavigationViewHelper.enableNavigation(mContext, nav);
     }
 
-    private void init(){
+    private void init() {
         nav = findViewById(R.id.nav);
     }
+
 }
