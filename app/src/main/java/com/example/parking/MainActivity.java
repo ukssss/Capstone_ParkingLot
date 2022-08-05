@@ -2,13 +2,20 @@ package com.example.parking;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toolbar;
+
 import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -18,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_Activity";
 
     private Context mContext = MainActivity.this;
+    private ImageView imageView;
+    private DrawerLayout drawerLayout;
     private NavigationView nav;
 
     String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
@@ -31,9 +40,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         init();
+        onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
-
         tMap();
+    }
+
+    private void onClickDrawer() {
+        imageView = findViewById(R.id.iv_menu);
+        drawerLayout = findViewById(R.id.drawer);
+
+        imageView.setOnClickListener((view -> {
+            drawerLayout.openDrawer(Gravity.LEFT);
+        }));
     }
 
     private void init(){
