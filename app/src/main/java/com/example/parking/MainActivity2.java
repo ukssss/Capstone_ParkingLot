@@ -5,36 +5,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
-import android.opengl.EGLExt;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-
-import java.sql.Array;
-import java.util.Arrays;
-import java.util.List;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+
+import org.xmlpull.v1.XmlPullParser;
+
+import java.net.URLEncoder;
 
 public class MainActivity2 extends AppCompatActivity {
 
     private static final String TAG = "Main_Activity2";
 
+    private Context mContext = MainActivity2.this;
     private ImageView imageView;
     private DrawerLayout drawerLayout;
-    private Context mContext = MainActivity2.this;
     private NavigationView nav;
-    private ListView listView;
-    private ArrayAdapter arrayAdapter;
-
-    List<String> items = Arrays.asList(
-            "장성주차장", "엄궁초등학교지하주차장", "학장동행정복지센터", "사상구청주차장", "부경대학교주차장"
-    );
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -50,7 +44,6 @@ public class MainActivity2 extends AppCompatActivity {
         init();
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
-        listView();
 
     }
 
@@ -67,10 +60,6 @@ public class MainActivity2 extends AppCompatActivity {
         }));
     }
 
-    private void listView() {
-        listView = findViewById(R.id.list_view);
 
-        arrayAdapter = new ArrayAdapter(mContext, android.R.layout.simple_expandable_list_item_1, items);
-        listView.setAdapter(arrayAdapter);
-    }
 }
+
