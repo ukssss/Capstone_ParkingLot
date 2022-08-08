@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 markerItem1.setPosition(0.5f, 1.0f);
                 markerItem1.setTMapPoint(point);
                 markerItem1.setName(entity.getPkNam());
-                tMapView.setCenterPoint(mapPoint.get(i).getyCdnt(), mapPoint.get(i).getxCdnt());
+                tMapView.setCenterPoint(mapPoint.get(i).getxCdnt(), mapPoint.get(i).getyCdnt());
                 tMapView.addMarkerItem("markerItem1" + i, markerItem1);
             }
         }
