@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapView.setIconVisibility(true);
 
         //Initial Setting
-        tMapView.setZoomLevel(12);
+        tMapView.setZoomLevel(10);
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
 
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // Initial Setting
         tMapGPS.setMinTime(1000);
-        tMapGPS.setMinDistance(10);
+        tMapGPS.setMinDistance(5);
         tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
         // tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
 
@@ -123,19 +123,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         try {
             mapPoint = parser.apiParserSearch();
         }
-        catch (Exception e) {
+        catch(Exception e) {
             e.printStackTrace();
         }
         for (int i = 0; i < mapPoint.size(); i++) {
             for (MapPoint entity : mapPoint) {
-                TMapPoint point = new TMapPoint(mapPoint.get(i).getLatitude(), mapPoint.get(i).getLongitude());
-
+                TMapPoint point = new TMapPoint(mapPoint.get(i).getxCdnt(), mapPoint.get(i).getyCdnt());
                 TMapMarkerItem markerItem1 = new TMapMarkerItem();
 
                 markerItem1.setPosition(0.5f, 1.0f);
                 markerItem1.setTMapPoint(point);
-                markerItem1.setName(entity.getName());
-                tMapView.setCenterPoint(mapPoint.get(i).getLongitude(), mapPoint.get(i).getLatitude());
+                markerItem1.setName(entity.getPkNam());
+                tMapView.setCenterPoint(mapPoint.get(i).getyCdnt(), mapPoint.get(i).getxCdnt());
                 tMapView.addMarkerItem("markerItem1" + i, markerItem1);
             }
         }

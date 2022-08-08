@@ -1,105 +1,98 @@
 package com.example.parking;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedInputStream;
+import java.net.URL;
+import java.util.ArrayList;
+
 public class ParkingLot {
-
-    // 현재 Parsing 하는 속성은 'O' 표시
-
-    String guNm;            // 관리기관명 O
-    String pkNam;           // 주차장명 O
-    String mgntNum;         // 주차장관리번호 O
-    String doroAddr;        // 소재지도로명주소 O
-    String jibunAddr;       // 소재지지번주소 O
-    String tponNum;         // 전화번호 O
-    String pkFm;            // 주차장유형
-    String pkCnt;           // 주차구획수
-    String svcSrtTe;        // 평일운영시작시각
-    String svcEndTe;        // 평일운영종료시각
-    String satSrtTe;        // 토요일운영시작시각
-    String satEndTe;        // 토요일운영종료시각
-    String hldSrtTe;        // 공휴일운영시작시각
-    String hldEndTe;        // 공휴일운영종료시각
-    String ldRtg;           // 급지구분
-    String tenMin;          // 주차기본요금
-    String ftDay;           // 1일주차권요금
-    String ftMon;           // 월정기권요금
-    String xCdnt;           // 위도 O
-    String yCdnt;           // 경도 O
-    String fnlDt;           // 데이터기준일자
-    String pkGubun;         // 주차장구분
-    String bujeGubun;       // 부제시행구분
-    String oprDay;          // 운영요일
-    String feeInfo;         // 요금정보
-    String pkBascTime;      // 주차기본시간
-    String pkAddTime;       // 추가단위시간
-    String feeAdd;          // 추가단위요금
-    String ftDayApplytime;  // 1일주차권요금적용시간
-    String payMtd;          // 결제방법
-    String spclNote;        // 특기사항
-    String currava;         // 실시간주차면수
-    String oprt_fm;         // 운영형태
-
-    public String getGuNm() {
-        return guNm;
+    private static String ServiceKey = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D";
+    public ParkingLot() {
+        try {
+            apiParserSearch();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setGuNm(String guNm) {
-        this.guNm = guNm;
+    public ArrayList<MapPoint> apiParserSearch() throws Exception {
+        URL url = new URL(getURLParam(null));
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        BufferedInputStream bis = new BufferedInputStream(url.openStream());
+        xpp.setInput(bis, "utf-8");
+
+        String tag = null;
+        int event_type = xpp.getEventType();
+
+        ArrayList<MapPoint> mapPoint = new ArrayList<MapPoint>();
+
+        String guNam = null, pkNam = null, xCdnt = null, yCdnt = null;
+        boolean bguNam = false, bpkNam = false, bxCdnt = false, byCdnt = false;
+
+        while (event_type != XmlPullParser.END_DOCUMENT) {
+            if (event_type == XmlPullParser.START_TAG) {
+                tag = xpp.getName();
+                if (tag.equals("guNam")) {
+                    bguNam = true;
+                }
+                if (tag.equals("pkNam")) {
+                    bpkNam = true;
+                }
+                if (tag.equals("xCdnt")) {
+                    bxCdnt = true;
+                }
+                if (tag.equals("yCdnt")) {
+                    byCdnt = true;
+                }
+            }
+            else if (event_type == XmlPullParser.TEXT) {
+                if (bguNam == true) {
+                    guNam = xpp.getText();
+                    bguNam = false;
+                }
+                else if (bpkNam == true) {
+                    pkNam = xpp.getText();
+                    bpkNam = false;
+                }
+                else if (bxCdnt == true) {
+                    xCdnt = xpp.getText();
+                    bxCdnt = false;
+                }
+                else if (byCdnt == true) {
+                    yCdnt = xpp.getText();
+                    byCdnt = false;
+                }
+            }
+            else if (event_type == XmlPullParser.END_TAG) {
+                tag = xpp.getName();
+                if (tag.equals("row")) {
+                    MapPoint entity = new MapPoint();
+                    entity.setGuNam(guNam);
+                    entity.setPkNam(pkNam);
+                    entity.setxCdnt(Double.valueOf(xCdnt));
+                    entity.setyCdnt(Double.valueOf(yCdnt));
+                    mapPoint.add(entity);
+                    System.out.println(mapPoint.size());
+                }
+            }
+            event_type = xpp.next();
+        }
+        System.out.println(mapPoint.size());
+        return mapPoint;
     }
 
-    public String getPkNam() {
-        return pkNam;
+    private String getURLParam(String search) {
+        String url = "http://apis.data.go.kr/6260000/BusanPblcPrkngInfoService/getPblcPrkngInfo?serviceKey=" + ServiceKey + "&numOfRows=300&pageNo=1";
+        return url;
     }
 
-    public void setPkNam(String pkNam) {
-        this.pkNam = pkNam;
+    public static void main(String[] args) {
+        new ParkingLot();
     }
-
-    public String getMgntNum() {
-        return mgntNum;
-    }
-
-    public void setMgntNum(String mgntNum) {
-        this.mgntNum = mgntNum;
-    }
-
-    public String getDoroAddr() {
-        return doroAddr;
-    }
-
-    public void setDoroAddr() {
-        this.doroAddr = doroAddr;
-    }
-
-    public String getJibunAddr() {
-        return jibunAddr;
-    }
-
-    public void setJibunAddr() {
-        this.jibunAddr = jibunAddr;
-    }
-
-    public String getTponNum() {
-        return tponNum;
-    }
-
-    public void  setTponNum() {
-        this.tponNum = tponNum;
-    }
-
-    public String getxCdnt() {
-        return xCdnt;
-    }
-
-    public void setxCdnt() {
-        this.xCdnt = xCdnt;
-    }
-
-    public String getyCdnt() {
-        return yCdnt;
-    }
-
-    public void setyCdnt() {
-        this.yCdnt = yCdnt;
-    }
-
 }
