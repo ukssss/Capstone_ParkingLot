@@ -1,28 +1,55 @@
 package com.example.parking;
 
 public class MapPoint {
+    private String guNam;   // 관리기관명
+    private String pkNam;   // 주차장명
+    private double xCdnt;    // 위도
+    private double yCdnt;    // 경도
 
-    public String pkNam;
-    public double xCdnt;
-    public double yCdnt;
-    public String jibunAddr;
-    public String doroAddr;
-    public int currava;
+    public MapPoint() {
+        super();
+    }
 
-    // setter
-    public void setPkNam(String pkNam){ this.pkNam = pkNam; }
-    public void setxCdnt(double xCdnt){ this.xCdnt = xCdnt; }
-    public void setyCdnt(double yCdnt){ this.yCdnt = yCdnt; }
-    public void setJibunAddr(String jibunAddr){ this.jibunAddr = jibunAddr; }
-    public void setDoroAddr(String doroAddr){ this.doroAddr = doroAddr; }
-    public void setCurrava(int currava){ this.currava = currava; }
+    public MapPoint(String guNam, String pkNam, double xCdnt, double yCdnt) {
+        this.guNam = guNam;
+        this.pkNam = pkNam;
+        this.xCdnt = xCdnt;
+        this.yCdnt = yCdnt;
+    }
 
-    // getter
-    public String getPkNam(){ return this.pkNam; }
-    public double getxCdnt(){ return this.xCdnt; }
-    public double getyCdnt(){ return this.yCdnt; }
-    public String getJibunAddr(){ return this.jibunAddr; }
-    public String getDoroAddr(){ return this.doroAddr; }
-    public int getCurrava(){ return this.currava; }
+    // 관리기관명
+    public String getGuNam() {
+        return guNam;
+    }
 
+    public void setGuNam(String guNam) {
+        this.guNam = guNam;
+    }
+
+    // 주차장명
+    public String getPkNam() {
+        return pkNam;
+    }
+
+    public void setPkNam(String pkNam) {
+        this.pkNam = pkNam;
+    }
+
+    // 위도
+    public double getxCdnt() {
+        return xCdnt;
+    }
+
+    public void setxCdnt(double xCdnt) {
+        this.xCdnt = xCdnt;
+    }
+
+    // 경도
+    public double getyCdnt() {
+        return yCdnt;
+    }
+
+    public void setyCdnt(double yCdnt) {
+        this.yCdnt = yCdnt;
+    }
 }

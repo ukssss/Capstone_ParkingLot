@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class ParkingLot {
-    private static String ServiceKey = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D%3D";
+    private static String ServiceKey = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D";
     public ParkingLot() {
         try {
             apiParserSearch();
@@ -32,12 +32,15 @@ public class ParkingLot {
 
         ArrayList<MapPoint> mapPoint = new ArrayList<MapPoint>();
 
-        String pkNam = null, xCdnt = null, yCdnt = null;
-        boolean bpkNam = false, bxCdnt = false, byCdnt = false;
+        String guNam = null, pkNam = null, xCdnt = null, yCdnt = null;
+        boolean bguNam = false, bpkNam = false, bxCdnt = false, byCdnt = false;
 
         while (event_type != XmlPullParser.END_DOCUMENT) {
             if (event_type == XmlPullParser.START_TAG) {
                 tag = xpp.getName();
+                if (tag.equals("guNam")) {
+                    bguNam = true;
+                }
                 if (tag.equals("pkNam")) {
                     bpkNam = true;
                 }
@@ -49,7 +52,11 @@ public class ParkingLot {
                 }
             }
             else if (event_type == XmlPullParser.TEXT) {
-                if (bpkNam == true) {
+                if (bguNam == true) {
+                    guNam = xpp.getText();
+                    bguNam = false;
+                }
+                else if (bpkNam == true) {
                     pkNam = xpp.getText();
                     bpkNam = false;
                 }
@@ -66,6 +73,7 @@ public class ParkingLot {
                 tag = xpp.getName();
                 if (tag.equals("row")) {
                     MapPoint entity = new MapPoint();
+                    entity.setGuNam(guNam);
                     entity.setPkNam(pkNam);
                     entity.setxCdnt(Double.valueOf(xCdnt));
                     entity.setyCdnt(Double.valueOf(yCdnt));
@@ -76,7 +84,7 @@ public class ParkingLot {
             event_type = xpp.next();
         }
         System.out.println(mapPoint.size());
-        return  mapPoint;
+        return mapPoint;
     }
 
     private String getURLParam(String search) {
