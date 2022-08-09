@@ -14,10 +14,40 @@
         android:orientation="vertical">
         <include layout="@layout/toolbar_main"/>
 
-        <TextView
-            android:id="@+id/result"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <EditText
+                android:id="@+id/edit"
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:hint="Enter text to search"/>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="btnClick"
+                android:text="Search"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="8sp"
+                android:textStyle="bold" />
+
+        </ScrollView>
 
     </LinearLayout>
 

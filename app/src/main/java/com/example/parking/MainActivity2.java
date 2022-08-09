@@ -19,8 +19,10 @@ import android.widget.TextView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -29,12 +31,18 @@ import java.net.URLEncoder;
 public class MainActivity2 extends AppCompatActivity {
 
     private static final String TAG = "Main_Activity2";
-    String AppKey = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D%3D";
 
     private Context mContext = MainActivity2.this;
     private ImageView imageView;
     private DrawerLayout drawerLayout;
     private NavigationView nav;
+
+    EditText edit;
+    TextView text;
+    String data;
+
+    XmlPullParser xpp;
+    String key = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D%3D";
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -51,26 +59,9 @@ public class MainActivity2 extends AppCompatActivity {
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
 
-        StrictMode.enableDefaults();
+        edit = (EditText) findViewById(R.id.edit);
+        text = (TextView) findViewById(R.id.text);
 
-        TextView status1 = (TextView) findViewById(R.id.result); //파싱된 결과확인!
-        BufferedReader br = null;
-        try{
-            String urlstr = "http://apis.data.go.kr/6260000/BusanPblcPrkngInfoService/getPblcPrkngInfo?serviceKey=" + AppKey;
-            URL url = new URL(urlstr);
-            HttpURLConnection urlconnection = (HttpURLConnection) url.openConnection();
-            urlconnection.setRequestMethod("GET");
-            br = new BufferedReader(new InputStreamReader(urlconnection.getInputStream(),"UTF-8"));
-            String result = "";
-            String line;
-            while((line = br.readLine()) != null) {
-                result = result + line + "\n";
-            }
-            status1.setText(result);
-            System.out.println(result);
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
     }
 
     private void init(){
@@ -86,6 +77,125 @@ public class MainActivity2 extends AppCompatActivity {
         }));
     }
 
+    //Button을 클릭했을 때 자동으로 호출되는 callback method....
+    public void btnClick(View v){
+        switch( v.getId() ){
+            case R.id.button:
+
+                //Android 4.0 이상 부터는 네트워크를 이용할 때 반드시 Thread 사용해야 함
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        data = getXmlData();//아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기
+
+                        //UI Thread(Main Thread)를 제외한 어떤 Thread도 화면을 변경할 수 없기때문에
+                        //runOnUiThread()를 이용하여 UI Thread가 TextView 글씨 변경하도록 함
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // TODO Auto-generated method stub
+                                text.setText(data); //TextView에 문자열  data 출력
+                            }
+                        });
+                    }
+                }).start();
+                break;
+        }
+    }//btnClick method..
+
+
+    //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
+    String getXmlData(){
+
+        StringBuffer buffer = new StringBuffer();
+
+        String str = edit.getText().toString();
+        String location = URLEncoder.encode(str);
+
+        String queryUrl="http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api"
+                + "?serviceKey="+ key
+                + "&pageNo=1&numOfRows=1000&type=xml"
+                + "&insttCode=3310000";
+
+        try {
+            URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성.
+            InputStream is= url.openStream(); //url위치로 입력스트림 연결
+
+            XmlPullParserFactory factory= XmlPullParserFactory.newInstance();
+            XmlPullParser xpp= factory.newPullParser();
+            xpp.setInput( new InputStreamReader(is, "UTF-8") ); //inputstream 으로부터 xml 입력받기
+
+            String tag;
+
+            xpp.next();
+            int eventType= xpp.getEventType();
+
+            while( eventType != XmlPullParser.END_DOCUMENT ){
+                switch( eventType ){
+                    case XmlPullParser.START_DOCUMENT:
+                        buffer.append("파싱 시작...\n\n");
+                        break;
+
+                    case XmlPullParser.START_TAG:
+                        tag= xpp.getName();//테그 이름 얻어오기
+
+                        if(tag.equals("item")) ;// 첫번째 검색결과
+                        else if(tag.equals("prkplceNm")){
+                            buffer.append("주차장명 : ");
+                            xpp.next();
+                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n"); //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("prkplceSe")){
+                            buffer.append("주차장구분 : ");
+                            xpp.next();
+                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n"); //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("rdnmadr")){
+                            buffer.append("소재지도로명주소 : ");
+                            xpp.next();
+                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n"); //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("lnmadr")){
+                            buffer.append("소재지지번주소 : ");
+                            xpp.next();
+                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n"); //줄바꿈 문자 추가
+                        }
+                        else if(tag.equals("phoneNumber")){
+                            buffer.append("전화번호 : ");
+                            xpp.next();
+                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
+                            buffer.append("\n"); //줄바꿈 문자 추가
+                        }
+
+                        break;
+
+                    case XmlPullParser.TEXT:
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        tag= xpp.getName(); //테그 이름 얻어오기
+
+                        if(tag.equals("item")) buffer.append("\n");// 첫번째 검색결과종료..줄바꿈
+                        break;
+                }
+
+                eventType= xpp.next();
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch blocke.printStackTrace();
+        }
+
+        buffer.append("파싱 끝\n");
+        return buffer.toString();//StringBuffer 문자열 객체 반환
+
+    }//getXmlData method....
 
 }
 
