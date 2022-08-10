@@ -12,9 +12,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -37,12 +43,15 @@ public class MainActivity2 extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView nav;
 
-    EditText edit;
     TextView text;
+    TextView tv_spinner;
+    Spinner spinner;
     String data;
 
     XmlPullParser xpp;
     String key = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D%3D";
+    String area;
+    String areaNum;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -55,16 +64,16 @@ public class MainActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        spinner = findViewById(R.id.spinner);
+        text = (TextView) findViewById(R.id.text);
+
         init();
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
-
-        edit = (EditText) findViewById(R.id.edit);
-        text = (TextView) findViewById(R.id.text);
-
+        setSpinner();
     }
 
-    private void init(){
+    private void init() {
         nav = findViewById(R.id.nav);
     }
 
@@ -77,17 +86,47 @@ public class MainActivity2 extends AppCompatActivity {
         }));
     }
 
+    // Spinner
+    public void setSpinner() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected (AdapterView < ? > adapterView, View view, int i, long l) {
+                area = spinner.getSelectedItem().toString();
+                if (area.equals("중구")) {areaNum = "3250000";}
+                else if (area.equals("서구")) {areaNum = "3260000";}
+                else if (area.equals("동구")) {areaNum = "3270000";}
+                else if (area.equals("영도구")) {areaNum = "3280000";}
+                else if (area.equals("부산진구")) {areaNum = "3290000";}
+                else if (area.equals("동래구")) {areaNum = "3300000";}
+                else if (area.equals("남구")) {areaNum = "3310000";}
+                else if (area.equals("북구")) {areaNum = "3320000";}
+                else if (area.equals("해운대구")) {areaNum = "3330000";}
+                else if (area.equals("사하구")) {areaNum = "3340000";}
+                else if (area.equals("금정구")) {areaNum = "3350000";}
+                else if (area.equals("강서구")) {areaNum = "3360000";}
+                else if (area.equals("연제구")) {areaNum = "3370000";}
+                else if (area.equals("수영구")) {areaNum = "3380000";}
+                else if (area.equals("사상구")) {areaNum = "3390000";}
+                else if (area.equals("기장군")) {areaNum = "3400000";}
+            }
+
+            @Override
+            public void onNothingSelected (AdapterView < ? > adapterView){}
+    });
+}
+
+
     //Button을 클릭했을 때 자동으로 호출되는 callback method....
     public void btnClick(View v){
         switch( v.getId() ){
             case R.id.button:
-
+                Toast.makeText(getApplicationContext(), area + " Load", Toast.LENGTH_SHORT).show();
                 //Android 4.0 이상 부터는 네트워크를 이용할 때 반드시 Thread 사용해야 함
                 new Thread(new Runnable() {
 
                     @Override
                     public void run() {
-                        // TODO Auto-generated method stub
                         data = getXmlData();//아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기
 
                         //UI Thread(Main Thread)를 제외한 어떤 Thread도 화면을 변경할 수 없기때문에
@@ -105,19 +144,16 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }//btnClick method..
 
-
-    //XmlPullParser를 이용하여 Naver 에서 제공하는 OpenAPI XML 파일 파싱하기(parsing)
+    //XmlPullParser를 이용하여 OpenAPI XML 파일 파싱하기(parsing)
     String getXmlData(){
 
         StringBuffer buffer = new StringBuffer();
 
-        String str = edit.getText().toString();
-        String location = URLEncoder.encode(str);
-
         String queryUrl="http://api.data.go.kr/openapi/tn_pubr_prkplce_info_api"
                 + "?serviceKey="+ key
-                + "&pageNo=1&numOfRows=1000&type=xml"
-                + "&insttCode=3310000";
+                + "&pageNo=1&numOfRows=300&type=xml"
+                + "&prkplceSe=공영"
+                + "&insttCode=" + areaNum;
 
         try {
             URL url= new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성.

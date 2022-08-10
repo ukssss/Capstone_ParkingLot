@@ -20,11 +20,11 @@
             android:orientation="horizontal"
             android:weightSum="10">
 
-            <EditText
-                android:id="@+id/edit"
+            <Spinner
+                android:id="@+id/spinner"
                 android:layout_width="250dp"
                 android:layout_height="match_parent"
-                android:hint="Enter text to search"/>
+                android:entries="@array/행정구역"/>
 
             <Button
                 android:id="@+id/button"
@@ -44,7 +44,7 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="8sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
         </ScrollView>
