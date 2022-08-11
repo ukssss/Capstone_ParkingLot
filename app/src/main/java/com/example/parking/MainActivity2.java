@@ -121,7 +121,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void btnClick(View v){
         switch( v.getId() ){
             case R.id.button:
-                Toast.makeText(getApplicationContext(), area + " Load", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "부산광역시 "+ area , Toast.LENGTH_SHORT).show();
                 //Android 4.0 이상 부터는 네트워크를 이용할 때 반드시 Thread 사용해야 함
                 new Thread(new Runnable() {
 
