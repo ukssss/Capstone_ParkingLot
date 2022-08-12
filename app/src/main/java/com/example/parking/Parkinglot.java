@@ -2,7 +2,7 @@ package com.example.parking;
 
 import java.sql.Date;
 
-public class BusanParkingInfo {
+public class Parkinglot {
 
     public int id;                          // id
     public String district;                 // 행정구역
@@ -21,7 +21,7 @@ public class BusanParkingInfo {
     public double longitude;                // 경도
 
     public String insttCode;                // 제공기관코드
-    public Date referenceDate;              // 데이터기준일자
+    public String referenceDate;              // 데이터기준일자
 
     // SET
     public void setId(int id) { this.id = id; }
@@ -42,7 +42,7 @@ public class BusanParkingInfo {
     public void setLongitude(double longitude) { this.longitude = longitude; }
 
     public void setInsttCode(String insttCode) { this.insttCode = insttCode; }
-    public void setReferenceDate(Date referenceDate) { this.referenceDate = referenceDate; }
+    public void setReferenceDate(String referenceDate) { this.referenceDate = referenceDate; }
 
     // GET
     public int getId() { return this.id; }
@@ -63,7 +63,7 @@ public class BusanParkingInfo {
     public double getLongitude() { return this.longitude; }
 
     public String getInsttCode() { return this.insttCode; }
-    public Date getReferenceDate() { return this.referenceDate; }
+    public String getReferenceDate() { return this.referenceDate; }
 
 }
 

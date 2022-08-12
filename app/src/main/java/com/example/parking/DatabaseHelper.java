@@ -17,20 +17,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
+
     // Error TAG
     protected static String TAG = "DatabaseHelper";
 
-    private static String databasePath = ""; // 데이터베이스 경로
-    private static String databaseName = "BusanParkingInfo.db"; // 데이터베이스 이름
-    private static String tableName = "parkinglot"; // 테이블 이름
+    private static String databasePath = "";
+    private static String databaseName = "parkinglot.db";
+    private static String tableName = "parkinglot";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public DatabaseHelper(Context context){
+    public DatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
 
-        if (Build.VERSION.SDK_INT >= 17){
+        if (Build.VERSION.SDK_INT >= 17) {
             databasePath = context.getApplicationInfo().dataDir + "/databases/";
         }
         else {
@@ -38,59 +39,59 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         }
 
         this.mContext = context;
+
     }
 
-    // 데이터베이스 파일 열기
     public boolean OpenDatabaseFile() throws SQLException {
 
-        if(!CheckDatabaseFileExist()){
+        if (!CheckDatabaseFileExist()) {
             CreateDatabase();
         }
 
         String mPath = databasePath + databaseName;
-        try{
+
+        try {
             mDatabase = SQLiteDatabase.openDatabase(mPath, null, SQLiteDatabase.CREATE_IF_NECESSARY);
-            Log.e(TAG,  "[SUCCESS] " + databaseName + " are Opened");
+            Log.e(TAG, "[SUCCESS] " + databaseName + " are Opened");
         }
-        catch(SQLException sqlException){
-            Log.e(TAG, "[ERROR]" + "Can't Open Database");
+        catch (SQLException sqlException) {
+            Log.e(TAG, "[ERROR] " + "Can't Open Database!");
         }
-        return mDatabase != null;
+
+        return  mDatabase != null;
+
     }
 
-    // 데이터베이스 파일 존재 여부 확인
-    public boolean CheckDatabaseFileExist(){
+    public boolean CheckDatabaseFileExist() {
         File file = new File(databasePath + databaseName);
         return file.exists();
     }
 
-    // Database 만들기
-    public void CreateDatabase() throws SQLException{
+    public void CreateDatabase() throws SQLException {
 
         this.getReadableDatabase();
         this.close();
 
-        try{
+        try {
             CopyDatabaseFile();
-            Log.e(TAG,  "[SUCCESS] " + databaseName + " are Created");
+            Log.e(TAG, "[SUCCESS] " + databaseName + " are Created!");
         }
-        catch(IOException ioException){
-            // Error Message
+        catch (IOException ioException) {
             Log.e(TAG, "[ERROR] " + "Unable to create " + databaseName);
             throw new Error(TAG);
         }
     }
 
-    // 데이터베이스 복사
-    public void CopyDatabaseFile() throws IOException{
+    public void CopyDatabaseFile() throws IOException {
 
-        InputStream inputStream  = mContext.getAssets().open(databaseName);
+        InputStream inputStream = mContext.getAssets().open(databaseName);
         String outputFileName = databasePath + databaseName;
         OutputStream outputStream = new FileOutputStream(outputFileName);
 
         byte[] buffer = new byte[1024];
         int length;
-        while((length = inputStream.read(buffer)) > 0){
+
+        while ((length = inputStream.read(buffer)) > 0) {
             outputStream.write(buffer, 0, length);
         }
 
@@ -99,64 +100,48 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         inputStream.close();
     }
 
-
-    // 테이블 정보 가져오기
     public List getTableData() {
 
-        try{
-            // 테이블 정보를 저장할 List
+        try {
             List mList = new ArrayList();
 
-            // 쿼리
             String sql = "SELECT * FROM " + tableName;
 
-            // 테이블 데이터를 읽기 위한 Cursor
             Cursor mCursor = mDatabase.rawQuery(sql, null);
 
-            // 테이블 끝까지 읽기
-            if (mCursor != null){
+            if (mCursor != null) {
+                while (mCursor.moveToNext()) {
 
-                // 다음 Row로 이동
-                while(mCursor.moveToNext()){
+                    Parkinglot parkinglot = new Parkinglot();
 
-                    // 해당 Row 저장
-                    BusanParkingInfo busanParkingInfo = new BusanParkingInfo();
+                    parkinglot.setId(mCursor.getInt(0));
+                    parkinglot.setDistrict(mCursor.getString(1));
+                    parkinglot.setPrkplceNo(mCursor.getString(2));
+                    parkinglot.setPrkplceNm(mCursor.getString(3));
+                    parkinglot.setPrkplceSe(mCursor.getString(4));
+                    parkinglot.setPrkplceType(mCursor.getString(5));
+                    parkinglot.setRdnmadr(mCursor.getString(6));
+                    parkinglot.setLnmadr(mCursor.getString(7));
+                    parkinglot.setOperDay(mCursor.getString(8));
+                    parkinglot.setParkingchargeInfo(mCursor.getString(9));
+                    parkinglot.setInstitutionNm(mCursor.getString(10));
+                    parkinglot.setPhoneNumber(mCursor.getString(11));
+                    parkinglot.setLatitude(mCursor.getDouble(12));
+                    parkinglot.setLongitude(mCursor.getDouble(13));
+                    parkinglot.setInsttCode(mCursor.getString(14));
+                    parkinglot.setReferenceDate(mCursor.getString(15));
 
-                    busanParkingInfo.setId(mCursor.getInt(0));
-                    busanParkingInfo.setDistrict(mCursor.getString(1));
-                    busanParkingInfo.setPrkplceNo(mCursor.getString(2));
-                    busanParkingInfo.setPrkplceNm(mCursor.getString(3));
-                    busanParkingInfo.setPrkplceSe(mCursor.getString(4));
-                    busanParkingInfo.setLatitude(mCursor.getDouble(5));
-                    busanParkingInfo.setLongitude(mCursor.getDouble(5));
-
-                    // List에 해당 Row 추가
-                    mList.add(busanParkingInfo);
+                    mList.add(parkinglot);
                 }
-
             }
+
             return mList;
 
-        }
-        catch (SQLException mSQLException){
-            // Error Message
+        } catch (SQLException mSQLException) {
             Log.e(TAG, mSQLException.toString());
             throw mSQLException;
         }
 
-    }
-
-    // 데이터베이스 닫기
-    public void CloseDatabaseFile(){
-        if (mDatabase != null){
-            mDatabase.close();
-        }
-    }
-
-    @Override
-    public synchronized void close(){
-        CloseDatabaseFile();
-        super.close();
     }
 
     @Override
@@ -168,6 +153,5 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
 
 }
