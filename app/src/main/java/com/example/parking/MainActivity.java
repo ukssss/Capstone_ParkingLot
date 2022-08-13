@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapView.setSKTMapApiKey(API_Key);
 
         // Initial Setting
-        tMapView.setZoomLevel(15);
+        tMapView.setZoomLevel(16);
         tMapView.setIconVisibility(true);
         tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
         tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     public void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_yellow);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 

@@ -22,8 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     protected static String TAG = "DatabaseHelper";
 
     private static String databasePath = "";
-    private static String databaseName = "parkinglot.db";
-    private static String tableName = "parkinglot";
+    private static String databaseName = "test.db";
+    private static String tableName = "test";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
@@ -115,21 +115,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                     Parkinglot parkinglot = new Parkinglot();
 
                     parkinglot.setId(mCursor.getInt(0));
-                    parkinglot.setDistrict(mCursor.getString(1));
-                    parkinglot.setPrkplceNo(mCursor.getString(2));
-                    parkinglot.setPrkplceNm(mCursor.getString(3));
-                    parkinglot.setPrkplceSe(mCursor.getString(4));
-                    parkinglot.setPrkplceType(mCursor.getString(5));
-                    parkinglot.setRdnmadr(mCursor.getString(6));
-                    parkinglot.setLnmadr(mCursor.getString(7));
-                    parkinglot.setOperDay(mCursor.getString(8));
-                    parkinglot.setParkingchargeInfo(mCursor.getString(9));
-                    parkinglot.setInstitutionNm(mCursor.getString(10));
-                    parkinglot.setPhoneNumber(mCursor.getString(11));
-                    parkinglot.setLatitude(mCursor.getDouble(12));
-                    parkinglot.setLongitude(mCursor.getDouble(13));
-                    parkinglot.setInsttCode(mCursor.getString(14));
-                    parkinglot.setReferenceDate(mCursor.getString(15));
+                    parkinglot.setPrkplceNm(mCursor.getString(1));
+                    parkinglot.setLnmadr(mCursor.getString(2));
+                    parkinglot.setLatitude(mCursor.getDouble(3));
+                    parkinglot.setLongitude(mCursor.getDouble(4));
 
                     mList.add(parkinglot);
                 }
