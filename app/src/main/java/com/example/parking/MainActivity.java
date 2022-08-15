@@ -117,6 +117,42 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
     };
 
+    TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
+        @Override
+        public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
+            TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
+
+            if (nRightButtonCount == 0) {
+                tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
+                tMapView.setZoom(17);
+
+                nRightButtonCount++;
+            }
+            else if (nRightButtonCount == 1) {
+                TMapPoint tMapPointStart = new TMapPoint(35.1348103, 129.1030291);
+
+                FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
+                findCarPathTask.execute(tMapPointStart, tMapPoint);
+                nRightButtonCount = 0;
+
+                tMapView.setCenterPoint(129.1030291, 35.1348103);
+
+                try {
+                    FindElapsedTimeTask findElapsedTimeTask = new FindElapsedTimeTask(getApplicationContext());
+                    findElapsedTimeTask.execute("1", API_Key,
+                            String.valueOf(tMapPointStart.getLongitude()),
+                            String.valueOf(tMapPointStart.getLatitude()),
+                            String.valueOf(tMapPoint.getLongitude()),
+                            String.valueOf(tMapPoint.getLatitude()));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    };
+
     @Override
     public void onLocationChange(Location location) {
         tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
@@ -164,27 +200,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
     }
 
-    TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
-        @Override
-        public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
-            TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
 
-            if (nRightButtonCount == 0) {
-                tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
-                tMapView.setZoom(17);
-
-                nRightButtonCount++;
-            }
-            else if (nRightButtonCount == 1) {
-                TMapPoint tMapPointStart = new TMapPoint(35.1348103, 129.1030291);
-
-                FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
-                findCarPathTask.execute(tMapPointStart, tMapPoint);
-                nRightButtonCount = 0;
-
-                tMapView.setCenterPoint(129.1030291, 35.1348103);
-            }
-        }
-    };
 }
 
