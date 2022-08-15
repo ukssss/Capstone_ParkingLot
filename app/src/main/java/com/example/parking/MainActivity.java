@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // TMapView Setting
         tMapView.setOnClickListenerCallBack(mOnClickListenerCallback);
         tMapView.setCenterPoint(initialLongitude, initialLatitude);
-        tMapView.setZoomLevel(17);
+        tMapView.setZoomLevel(15);
         tMapView.setOnCalloutRightButtonClickListener(mOnCalloutRightButtonClickCallback);
 
         // Load Database (Parkinglot)
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
-                tMapView.setZoom(17);
+                tMapView.setZoom(15);
 
                 nRightButtonCount++;
             }
