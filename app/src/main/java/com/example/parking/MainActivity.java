@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ import com.skt.Tmap.TMapPoint;
 import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.skt.Tmap.poi_item.TMapPOIItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -39,8 +42,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
     // Initial Location
-    double initialLatitude = 35.13339;
-    double initialLongitude = 129.10498;
+    double initialLatitude = 35.1348103;
+    double initialLongitude = 129.1030291;
+
+    int nRightButtonCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +55,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         init();
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
-        tMap();
+
+        setTMapAuth();
+        initialize();
 
     }
+
+    // Layout
 
     private void onClickDrawer() {
         imageView = findViewById(R.id.iv_menu);
@@ -67,13 +76,23 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         nav = findViewById(R.id.nav);
     }
 
-    private void tMap() {
-        // T Map View
-        tMapView = new TMapView(this);
-        initTMapView();
+    // T Map
 
-        // T Map GPS
-        initTMapGPS();
+    private void setTMapAuth() {
+        tMapView = new TMapView(this);
+        tMapView.setSKTMapApiKey(API_Key);
+    }
+
+    private void initialize() {
+        // T Map View Using Linear Layout
+        LinearLayout linearLayoutTMap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
+        linearLayoutTMap.addView(tMapView);
+
+        // TMapView Setting
+        tMapView.setOnClickListenerCallBack(mOnClickListenerCallback);
+        tMapView.setCenterPoint(initialLongitude, initialLatitude);
+        tMapView.setZoomLevel(15);
+        tMapView.setOnCalloutRightButtonClickListener(mOnCalloutRightButtonClickCallback);
 
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
@@ -81,45 +100,58 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // Add Parkinglot Marker
         addParkinglotMarker(parkinglotList);
 
-        // T Map View Using Linear Layout
-        LinearLayout linearLayoutTMap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
-        linearLayoutTMap.addView(tMapView);
     }
 
-    public void initTMapView() {
-        // API Key
-        tMapView.setSKTMapApiKey(API_Key);
+    TMapView.OnClickListenerCallback mOnClickListenerCallback = new TMapView.OnClickListenerCallback() {
+        @Override
+        public boolean onPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
+            double latitude = tMapPoint.getLatitude();
+            double longitude = tMapPoint.getLongitude();
 
-        // Initial Setting
-        tMapView.setZoomLevel(16);
-        tMapView.setIconVisibility(true);
-        tMapView.setMapType(TMapView.MAPTYPE_STANDARD);
-        tMapView.setLanguage(TMapView.LANGUAGE_KOREAN);
-
-        // Initial Location Setting
-        tMapView.setLocationPoint(initialLongitude, initialLatitude);
-        tMapView.setCenterPoint(initialLongitude, initialLatitude);
-
-    }
-
-    public void initTMapGPS() {
-        // Request For GPS Permission
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return false;
         }
 
-        // T Map GPS
-        tMapGPS = new TMapGpsManager(this);
+        @Override
+        public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
+            return false;
+        }
+    };
 
-        // Initial Setting
-        tMapGPS.setMinTime(1000);
-        tMapGPS.setMinDistance(10);
-        // tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
-        tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
+    TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
+        @Override
+        public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
+            TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
 
-        // Using GPS
-        tMapGPS.OpenGps();
-    }
+            if (nRightButtonCount == 0) {
+                tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
+                tMapView.setZoom(15);
+
+                nRightButtonCount++;
+            }
+            else if (nRightButtonCount == 1) {
+                TMapPoint tMapPointStart = new TMapPoint(35.1348103, 129.1030291);
+
+                FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
+                findCarPathTask.execute(tMapPointStart, tMapPoint);
+                nRightButtonCount = 0;
+
+                tMapView.setCenterPoint(129.1030291, 35.1348103);
+
+                try {
+                    FindElapsedTimeTask findElapsedTimeTask = new FindElapsedTimeTask(getApplicationContext());
+                    findElapsedTimeTask.execute("1", API_Key,
+                            String.valueOf(tMapPointStart.getLongitude()),
+                            String.valueOf(tMapPointStart.getLatitude()),
+                            String.valueOf(tMapPoint.getLongitude()),
+                            String.valueOf(tMapPoint.getLatitude()));
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    };
 
     @Override
     public void onLocationChange(Location location) {
@@ -127,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
     }
 
-    public List<Parkinglot> initLoadParkinglotDatabase() {
+    private List<Parkinglot> initLoadParkinglotDatabase() {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
         databaseHelper.OpenDatabaseFile();
 
@@ -137,9 +169,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         return parkinglotList;
     }
 
-    public void addParkinglotMarker(List<Parkinglot> parkinglotList) {
+    private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
+        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_red);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
@@ -151,8 +184,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
 
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-            tMapMarkerItem.setIcon(bitmap);
+            tMapMarkerItem.setIcon(bitmap1);
             tMapMarkerItem.setPosition(0.5f, 1.0f);
+            tMapMarkerItem.setCalloutRightButtonImage(bitmap2);
             tMapMarkerItem.setTMapPoint(tMapPoint);
             tMapMarkerItem.setName(title);
 
@@ -165,5 +199,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
     }
+
+
 }
 
