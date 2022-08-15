@@ -14,6 +14,8 @@ import android.widget.ImageView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 public class MainActivity3 extends AppCompatActivity {
 
     private static final String TAG = "Main_Activity3";
@@ -50,6 +52,27 @@ public class MainActivity3 extends AppCompatActivity {
         imageView.setOnClickListener((view -> {
             drawerLayout.openDrawer(Gravity.LEFT);
         }));
+    }
+
+    public List<Parkinglot> initLoadParkinglotDatabase() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        databaseHelper.OpenDatabaseFile();
+
+        List<Parkinglot> parkinglotList = databaseHelper.getTableData();
+        Log.e("test", String.valueOf(parkinglotList.size()));
+
+        return parkinglotList;
+    }
+
+    public void searchParkinglot(List<Parkinglot> parkinglotList) {
+
+        for (int i = 0; i < parkinglotList.size(); i++) {
+            String title = parkinglotList.get(i).prkplceNm;
+            String subTitle = parkinglotList.get(i).lnmadr;
+            double latitude = parkinglotList.get(i).latitude;
+            double longitude = parkinglotList.get(i).longitude;
+
+        }
     }
 }
 

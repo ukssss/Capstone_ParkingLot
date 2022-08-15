@@ -190,12 +190,6 @@ public class MainActivity2 extends AppCompatActivity {
                             buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
                         }
-                        else if(tag.equals("rdnmadr")){
-                            buffer.append("소재지도로명주소 : ");
-                            xpp.next();
-                            buffer.append(xpp.getText());//title 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n"); //줄바꿈 문자 추가
-                        }
                         else if(tag.equals("lnmadr")){
                             buffer.append("소재지지번주소 : ");
                             xpp.next();
