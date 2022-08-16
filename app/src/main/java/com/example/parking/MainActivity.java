@@ -41,11 +41,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private TMapGpsManager tMapGPS = null;
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
-    // Initial Location
-    double initialLatitude = 35.1348103;
-    double initialLongitude = 129.1030291;
-
-    int nRightButtonCount = 0;
+    public int nRightButtonCount = 0;
+    public double nowLongitude;
+    public double nowLatitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +88,22 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // TMapView Setting
         tMapView.setOnClickListenerCallBack(mOnClickListenerCallback);
-        tMapView.setCenterPoint(initialLongitude, initialLatitude);
         tMapView.setZoomLevel(15);
+        tMapView.setIconVisibility(true);
         tMapView.setOnCalloutRightButtonClickListener(mOnCalloutRightButtonClickCallback);
+
+        // Request For GPS Permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
+
+        // GPS using T Map
+        tMapGPS = new TMapGpsManager(this);
+        tMapGPS.setMinTime(1000);
+        tMapGPS.setMinDistance(10);
+        //tMapGPS.setProvider(tMapGPS.NETWORK_PROVIDER);
+        tMapGPS.setProvider(tMapGPS.GPS_PROVIDER);
+        tMapGPS.OpenGps();
 
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
@@ -100,6 +111,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // Add Parkinglot Marker
         addParkinglotMarker(parkinglotList);
 
+    }
+
+    @Override
+    public void onLocationChange(Location location) {
+        tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
+        tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
+        nowLongitude = location.getLongitude();
+        nowLatitude = location.getLatitude();
     }
 
     TMapView.OnClickListenerCallback mOnClickListenerCallback = new TMapView.OnClickListenerCallback() {
@@ -129,13 +148,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 nRightButtonCount++;
             }
             else if (nRightButtonCount == 1) {
-                TMapPoint tMapPointStart = new TMapPoint(35.1348103, 129.1030291);
+                TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
 
                 FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
                 findCarPathTask.execute(tMapPointStart, tMapPoint);
                 nRightButtonCount = 0;
 
-                tMapView.setCenterPoint(129.1030291, 35.1348103);
+                tMapView.setCenterPoint(nowLongitude, nowLatitude);
 
                 try {
                     FindElapsedTimeTask findElapsedTimeTask = new FindElapsedTimeTask(getApplicationContext());
@@ -152,12 +171,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         }
     };
-
-    @Override
-    public void onLocationChange(Location location) {
-        tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
-        tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
-    }
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
