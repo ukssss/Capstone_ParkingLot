@@ -10,7 +10,6 @@ public class Parkinglot {
     public double latitude;                 // 위도
     public double longitude;                // 경도
 
-
     // SET
     public void setId(int id) { this.id = id; }
     public void setPrkplceNm(String prkplceNm) { this.prkplceNm = prkplceNm; }

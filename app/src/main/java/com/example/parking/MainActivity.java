@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
-                tMapView.setZoom(15);
+                Toast.makeText(mContext,"목적지로 설정하려면 빨간핀을 눌러주세요", Toast.LENGTH_SHORT).show();
 
                 nRightButtonCount++;
             }
@@ -152,9 +153,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                 FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
                 findCarPathTask.execute(tMapPointStart, tMapPoint);
-                nRightButtonCount = 0;
 
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
+                tMapView.setZoomLevel(17);
+                Toast.makeText(mContext,"도착하시면 빨간핀을 한번 더 눌러주세요", Toast.LENGTH_SHORT).show();
+                nRightButtonCount++;
 
                 try {
                     FindElapsedTimeTask findElapsedTimeTask = new FindElapsedTimeTask(getApplicationContext());
@@ -168,6 +171,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     e.printStackTrace();
                 }
 
+            }
+
+            else if (nRightButtonCount == 2) {
+                tMapView.setZoomLevel(15);
+                Toast.makeText(mContext,"정상적으로 도착하셨습니다", Toast.LENGTH_SHORT).show();
+
+                nRightButtonCount = 0;
             }
         }
     };
