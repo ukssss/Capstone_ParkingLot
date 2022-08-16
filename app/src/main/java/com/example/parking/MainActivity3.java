@@ -1,20 +1,19 @@
 package com.example.parking;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.List;
 
 public class MainActivity3 extends AppCompatActivity {
 
@@ -24,6 +23,10 @@ public class MainActivity3 extends AppCompatActivity {
     private ImageView imageView;
     private DrawerLayout drawerLayout;
     private NavigationView nav;
+
+    private ListView listView;
+    String data;
+    TextView text;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -39,9 +42,13 @@ public class MainActivity3 extends AppCompatActivity {
         init();
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
+
+        // Load Database (Parkinglot)
+
+
     }
 
-    private void init(){
+    private void init() {
         nav = findViewById(R.id.nav);
     }
 
@@ -54,25 +61,6 @@ public class MainActivity3 extends AppCompatActivity {
         }));
     }
 
-    public List<Parkinglot> initLoadParkinglotDatabase() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        databaseHelper.OpenDatabaseFile();
 
-        List<Parkinglot> parkinglotList = databaseHelper.getTableData();
-        Log.e("test", String.valueOf(parkinglotList.size()));
-
-        return parkinglotList;
-    }
-
-    public void searchParkinglot(List<Parkinglot> parkinglotList) {
-
-        for (int i = 0; i < parkinglotList.size(); i++) {
-            String title = parkinglotList.get(i).prkplceNm;
-            String subTitle = parkinglotList.get(i).lnmadr;
-            double latitude = parkinglotList.get(i).latitude;
-            double longitude = parkinglotList.get(i).longitude;
-
-        }
-    }
 }
 

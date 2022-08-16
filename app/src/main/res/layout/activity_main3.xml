@@ -22,6 +22,7 @@
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:onClick="btnClick"
                 android:text="Search"
                 android:textSize="12sp" />
 
@@ -32,7 +33,7 @@
             android:layout_height="match_parent">
 
             <ListView
-                android:id="@+id/text"
+                android:id="@+id/listview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="12sp"
