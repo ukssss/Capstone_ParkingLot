@@ -9,11 +9,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity3 extends AppCompatActivity {
 
@@ -24,9 +30,8 @@ public class MainActivity3 extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView nav;
 
-    private ListView listView;
+    private TextView textView;
     String data;
-    TextView text;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -43,9 +48,6 @@ public class MainActivity3 extends AppCompatActivity {
         onClickDrawer();
         NavigationViewHelper.enableNavigation(mContext, nav);
 
-        // Load Database (Parkinglot)
-
-
     }
 
     private void init() {
@@ -60,7 +62,6 @@ public class MainActivity3 extends AppCompatActivity {
             drawerLayout.openDrawer(Gravity.LEFT);
         }));
     }
-
 
 }
 
