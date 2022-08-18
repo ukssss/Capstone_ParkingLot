@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     };
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        ParkinglotDatabaseHelper databaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
         databaseHelper.OpenDatabaseFile();
 
         List<Parkinglot> parkinglotList = databaseHelper.getTableData();

@@ -12,10 +12,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -31,7 +29,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private RecyclerAdapter adapter;
+    private ParkinglotRecyclerAdapter adapter;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -70,7 +68,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
-        DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+        ParkinglotDatabaseHelper databaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
         databaseHelper.OpenDatabaseFile();
 
         List<Parkinglot> parkinglotList = databaseHelper.getTableData();
@@ -82,7 +80,7 @@ public class MainActivity2 extends AppCompatActivity {
     private void initializedRecycler(List<Parkinglot> parkinglotList) {
         recyclerView = findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(this);
-        adapter = new RecyclerAdapter();
+        adapter = new ParkinglotRecyclerAdapter();
 
         for (int i = 0; i < parkinglotList.size(); i++) {
             adapter.addItems(parkinglotList.get(i));

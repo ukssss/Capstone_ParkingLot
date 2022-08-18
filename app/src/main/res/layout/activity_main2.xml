@@ -16,7 +16,23 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <Spinner
+                android:id="@+id/type_sp"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:hint="유형"
+                android:entries="@array/유형"/>
+
+            <Spinner
+                android:id="@+id/div_sp"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:hint="행정구역"
+                android:entries="@array/행정구역"/>
 
             <Button
                 android:id="@+id/button"
@@ -34,6 +50,7 @@
             android:layout_height="match_parent"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:text="조회하시려면 'Search' 를 눌러주세요"
             tools:ignore="MissingConstraints"
             tools:listitem="@layout/parkinglot_listview">
 

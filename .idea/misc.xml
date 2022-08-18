@@ -7,16 +7,17 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2085" />
         <entry key="app/src/main/res/layout/activity_base.xml" value="0.10416666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main2.xml" value="0.18592071533203125" />
         <entry key="app/src/main/res/layout/activity_main3.xml" value="0.28558807373046874" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/bottom_menu.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_first.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.24166666666666667" />
         <entry key="app/src/main/res/layout/fragment_third.xml" value="0.24166666666666667" />
+        <entry key="app/src/main/res/layout/gasstation_listview.xml" value="0.24429779052734377" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.1" />
         <entry key="app/src/main/res/layout/navi_drawer.xml" value="0.24114583333333334" />
-        <entry key="app/src/main/res/layout/parkinglot_listview.xml" value="0.22966156005859376" />
+        <entry key="app/src/main/res/layout/parkinglot_listview.xml" value="0.1" />
         <entry key="app/src/main/res/layout/toolbar.xml" value="0.11778115501519756" />
         <entry key="app/src/main/res/layout/toolbar_main.xml" value="0.1" />
         <entry key="app/src/main/res/menu/bottom_menu.xml" value="0.1" />
