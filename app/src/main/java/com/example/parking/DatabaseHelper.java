@@ -22,8 +22,8 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     protected static String TAG = "DatabaseHelper";
 
     private static String databasePath = "";
-    private static String databaseName = "test.db";
-    private static String tableName = "test";
+    private static String databaseName = "test2.db";
+    private static String tableName = "test2";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
@@ -115,10 +115,11 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                     Parkinglot parkinglot = new Parkinglot();
 
                     parkinglot.setId(mCursor.getInt(0));
-                    parkinglot.setPrkplceNm(mCursor.getString(1));
-                    parkinglot.setLnmadr(mCursor.getString(2));
-                    parkinglot.setLatitude(mCursor.getDouble(3));
-                    parkinglot.setLongitude(mCursor.getDouble(4));
+                    parkinglot.setName(mCursor.getString(1));
+                    parkinglot.setDiv(mCursor.getString(2));
+                    parkinglot.setAddr(mCursor.getString(3));
+                    parkinglot.setLatitude(mCursor.getDouble(4));
+                    parkinglot.setLongitude(mCursor.getDouble(5));
 
                     mList.add(parkinglot);
                 }

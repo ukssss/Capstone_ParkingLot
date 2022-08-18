@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
-            String title = parkinglotList.get(i).prkplceNm;
-            String subTitle = parkinglotList.get(i).lnmadr;
+            String title = parkinglotList.get(i).name;
+            String subTitle = parkinglotList.get(i).addr;
             double latitude = parkinglotList.get(i).latitude;
             double longitude = parkinglotList.get(i).longitude;
 
