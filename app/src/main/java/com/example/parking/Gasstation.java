@@ -14,6 +14,7 @@ public class Gasstation {
     public void setName(String name) { this.name = name; }
     public void setDiv(String div) { this.div = div; }
     public void setAddr(String addr) { this.addr = addr; }
+
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
 
@@ -22,6 +23,7 @@ public class Gasstation {
     public String getName() { return this.name; }
     public String getDiv() { return this.div; }
     public String getAddr() { return this.addr; }
+
     public double getLatitude() { return this.latitude; }
     public double getLongitude() { return this.longitude; }
 

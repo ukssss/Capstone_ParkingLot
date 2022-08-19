@@ -117,6 +117,7 @@ public class GasstationDatabaseHelper extends SQLiteOpenHelper {
                     gasstation.setName(mCursor.getString(1));
                     gasstation.setDiv(mCursor.getString(2));
                     gasstation.setAddr(mCursor.getString(3));
+
                     gasstation.setLatitude(mCursor.getDouble(4));
                     gasstation.setLongitude(mCursor.getDouble(5));
 

@@ -38,9 +38,10 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView id;
+        private TextView div;
         private TextView name;
         private TextView addr;
-        private TextView div;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,9 +55,10 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
         public void onBind(Parkinglot parkinglot, int position) {
             String s = "" + (position + 1);
             id.setText(s);
-            name.setText(parkinglot.getName());
-            addr.setText(parkinglot.getAddr());
             div.setText(parkinglot.getDiv());
+
+            name.setText(parkinglot.getName());
+            addr.setText("주소 : " + parkinglot.getAddr());
 
         }
     }

@@ -19,11 +19,11 @@ import java.util.List;
 public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     // Error TAG
-    protected static String TAG = "ParkingDatabaseHelper";
+    protected static String TAG = "ParkinglotDatabaseHelper";
 
     private static String databasePath = "";
-    private static String databaseName = "test2.db";
-    private static String tableName = "test2";
+    private static String databaseName = "parkinglot.db";
+    private static String tableName = "parkinglot";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
@@ -115,11 +115,17 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     Parkinglot parkinglot = new Parkinglot();
 
                     parkinglot.setId(mCursor.getInt(0));
-                    parkinglot.setName(mCursor.getString(1));
-                    parkinglot.setDiv(mCursor.getString(2));
-                    parkinglot.setAddr(mCursor.getString(3));
-                    parkinglot.setLatitude(mCursor.getDouble(4));
-                    parkinglot.setLongitude(mCursor.getDouble(5));
+                    parkinglot.setDiv(mCursor.getString(1));
+                    parkinglot.setName(mCursor.getString(2));
+                    parkinglot.setType(mCursor.getString(3));
+                    parkinglot.setAddr(mCursor.getString(4));
+                    parkinglot.setOperDay(mCursor.getString(5));
+                    parkinglot.setParkingchargeInfo(mCursor.getString(6));
+                    parkinglot.setPhoneNumber(mCursor.getString(7));
+
+
+                    parkinglot.setLatitude(mCursor.getDouble(8));
+                    parkinglot.setLongitude(mCursor.getDouble(9));
 
                     mList.add(parkinglot);
                 }

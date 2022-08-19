@@ -37,25 +37,28 @@ public class GasstationRecyclerAdapter extends RecyclerView.Adapter<GasstationRe
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView id;
+        private TextView div;
         private TextView name;
         private TextView addr;
-        private TextView div;
+
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             id = itemView.findViewById(R.id.id);
+            div = itemView.findViewById(R.id.div);
             name = itemView.findViewById(R.id.name);
             addr = itemView.findViewById(R.id.addr);
-            div = itemView.findViewById(R.id.div);
+
         }
 
         public void onBind(Gasstation gasstation, int position) {
             String s = "" + (position + 1);
             id.setText(s);
-            name.setText(gasstation.getName());
-            addr.setText(gasstation.getAddr());
             div.setText(gasstation.getDiv());
+            name.setText(gasstation.getName());
+            addr.setText("주소 : " + gasstation.getAddr());
+
 
         }
     }
