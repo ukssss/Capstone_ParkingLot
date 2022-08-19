@@ -1,4 +1,4 @@
-package com.example.parking;
+package com.example.parking.Database;
 
 public class Parkinglot {
 

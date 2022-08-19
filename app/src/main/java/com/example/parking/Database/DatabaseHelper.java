@@ -1,4 +1,4 @@
-package com.example.parking;
+package com.example.parking.Database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -16,18 +16,19 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GasstationDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper{
+
     // Error TAG
-    protected static String TAG = "GasstationDatabaseHelper";
+    protected static String TAG = "ParkinglotDatabaseHelper";
 
     private static String databasePath = "";
-    private static String databaseName = "gasstation.db";
-    private static String tableName = "gasstation";
+    private static String databaseName = "parkinglot.db";
+    private static String tableName = "parkinglot";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public GasstationDatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
 
         if (Build.VERSION.SDK_INT >= 17) {
@@ -111,17 +112,22 @@ public class GasstationDatabaseHelper extends SQLiteOpenHelper {
             if (mCursor != null) {
                 while (mCursor.moveToNext()) {
 
-                    Gasstation gasstation = new Gasstation();
+                    Parkinglot parkinglot = new Parkinglot();
 
-                    gasstation.setId(mCursor.getInt(0));
-                    gasstation.setName(mCursor.getString(1));
-                    gasstation.setDiv(mCursor.getString(2));
-                    gasstation.setAddr(mCursor.getString(3));
+                    parkinglot.setId(mCursor.getInt(0));
+                    parkinglot.setDiv(mCursor.getString(1));
+                    parkinglot.setName(mCursor.getString(2));
+                    parkinglot.setType(mCursor.getString(3));
+                    parkinglot.setAddr(mCursor.getString(4));
+                    parkinglot.setOperDay(mCursor.getString(5));
+                    parkinglot.setParkingchargeInfo(mCursor.getString(6));
+                    parkinglot.setPhoneNumber(mCursor.getString(7));
 
-                    gasstation.setLatitude(mCursor.getDouble(4));
-                    gasstation.setLongitude(mCursor.getDouble(5));
 
-                    mList.add(gasstation);
+                    parkinglot.setLatitude(mCursor.getDouble(8));
+                    parkinglot.setLongitude(mCursor.getDouble(9));
+
+                    mList.add(parkinglot);
                 }
             }
 

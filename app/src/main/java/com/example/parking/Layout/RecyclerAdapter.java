@@ -1,4 +1,4 @@
-package com.example.parking;
+package com.example.parking.Layout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.parking.Database.Parkinglot;
+import com.example.parking.R;
+
 import java.util.ArrayList;
 
-public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRecyclerAdapter.MyViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Parkinglot> parkinglotData = new ArrayList<>();
 
