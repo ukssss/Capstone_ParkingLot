@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,9 +30,15 @@ public class MainActivity2 extends AppCompatActivity {
 
     String key = "iUIvfulYGP2WncxaP93CKSBBGWPWdo5JDw7Ci7aLBbYni3pvsQ1VNvuJKhXF7sQ910XZu1lT%2FSX1aBtLdZ6xTA%3D%3D";
 
+    private Spinner typeSp;
+    private Spinner divSp;
+    private String type;
+    private String div;
+
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private ParkinglotRecyclerAdapter adapter;
+    private ParkinglotRecyclerAdapter parkingAdapter;
+    private GasstationRecyclerAdapter gasstationAdapter;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -49,8 +58,15 @@ public class MainActivity2 extends AppCompatActivity {
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
 
-        initializedRecycler(parkinglotList);
+        // Load Database (Gasstation)
+        List<Gasstation> gasstationList = initLoadGasstationDatabase();
 
+        // Set Option (Database, Division Select)
+        // setSpinner(parkinglotList, gasstationList);
+
+        initializedParkinglotRecycler(parkinglotList);
+
+        // initializedGasstationRecycler(gasstationList);
 
     }
 
@@ -68,26 +84,84 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
-        ParkinglotDatabaseHelper databaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
-        databaseHelper.OpenDatabaseFile();
+        ParkinglotDatabaseHelper parkinglotDatabaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
+        parkinglotDatabaseHelper.OpenDatabaseFile();
 
-        List<Parkinglot> parkinglotList = databaseHelper.getTableData();
-        Log.e("test", String.valueOf(parkinglotList.size()));
+        List<Parkinglot> parkinglotList = parkinglotDatabaseHelper.getTableData();
 
         return parkinglotList;
     }
 
-    private void initializedRecycler(List<Parkinglot> parkinglotList) {
+    private List<Gasstation> initLoadGasstationDatabase() {
+        GasstationDatabaseHelper gasstationDatabaseHelper = new GasstationDatabaseHelper(getApplicationContext());
+        gasstationDatabaseHelper.OpenDatabaseFile();
+
+        List<Gasstation> gasstationList = gasstationDatabaseHelper.getTableData();
+
+        return gasstationList;
+    }
+
+//    public void btnClick(View v, List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+//        switch (v.getId()) {
+//            case R.id.button:
+//                setSpinner(parkinglotList, gasstationList);
+//        }
+//    }
+//
+//    private void setSpinner(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+//        typeSp = findViewById(R.id.type_sp);
+//        divSp = findViewById(R.id.div_sp);
+//
+//        typeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//
+//        divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+//    }
+
+    private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
         recyclerView = findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(this);
-        adapter = new ParkinglotRecyclerAdapter();
+        parkingAdapter = new ParkinglotRecyclerAdapter();
 
         for (int i = 0; i < parkinglotList.size(); i++) {
-            adapter.addItems(parkinglotList.get(i));
+            parkingAdapter.addItems(parkinglotList.get(i));
         }
 
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(parkingAdapter);
     }
+
+    private void initializedGasstationRecycler(List<Gasstation> gasstationList) {
+        recyclerView = findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(this);
+        gasstationAdapter = new GasstationRecyclerAdapter();
+
+        for (int i = 0; i < gasstationList.size(); i++) {
+            gasstationAdapter.addItems(gasstationList.get(i));
+        }
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(gasstationAdapter);
+    }
+
 }
 
