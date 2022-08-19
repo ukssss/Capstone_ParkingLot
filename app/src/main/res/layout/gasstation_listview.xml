@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:text="금정구"
+            android:text="OO구"
             android:textSize="10sp"
             android:textColor="@android:color/black"
             android:textStyle="bold">
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
-            android:text="주차장명"
+            android:text="주유소명"
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:textStyle="bold"/>

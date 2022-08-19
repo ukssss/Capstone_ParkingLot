@@ -16,19 +16,18 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper{
-
+public class GasstationDatabaseHelper extends SQLiteOpenHelper {
     // Error TAG
-    protected static String TAG = "DatabaseHelper";
+    protected static String TAG = "GasstationDatabaseHelper";
 
     private static String databasePath = "";
-    private static String databaseName = "test2.db";
-    private static String tableName = "test2";
+    private static String databaseName = "gasstation.db";
+    private static String tableName = "gasstation";
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public DatabaseHelper(Context context) {
+    public GasstationDatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
 
         if (Build.VERSION.SDK_INT >= 17) {
@@ -112,16 +111,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
             if (mCursor != null) {
                 while (mCursor.moveToNext()) {
 
-                    Parkinglot parkinglot = new Parkinglot();
+                    Gasstation gasstation = new Gasstation();
 
-                    parkinglot.setId(mCursor.getInt(0));
-                    parkinglot.setName(mCursor.getString(1));
-                    parkinglot.setDiv(mCursor.getString(2));
-                    parkinglot.setAddr(mCursor.getString(3));
-                    parkinglot.setLatitude(mCursor.getDouble(4));
-                    parkinglot.setLongitude(mCursor.getDouble(5));
+                    gasstation.setId(mCursor.getInt(0));
+                    gasstation.setName(mCursor.getString(1));
+                    gasstation.setDiv(mCursor.getString(2));
+                    gasstation.setAddr(mCursor.getString(3));
 
-                    mList.add(parkinglot);
+                    gasstation.setLatitude(mCursor.getDouble(4));
+                    gasstation.setLongitude(mCursor.getDouble(5));
+
+                    mList.add(gasstation);
                 }
             }
 
