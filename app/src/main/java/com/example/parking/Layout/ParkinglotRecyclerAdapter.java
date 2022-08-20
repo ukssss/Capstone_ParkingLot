@@ -13,7 +13,7 @@ import com.example.parking.R;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Parkinglot> parkinglotData = new ArrayList<>();
 

@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.parking.Database.DatabaseHelper;
+import com.example.parking.Database.Gasstation;
+import com.example.parking.Database.GasstationDatabaseHelper;
+import com.example.parking.Database.ParkinglotDatabaseHelper;
 import com.example.parking.Layout.NavigationViewHelper;
 import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
@@ -114,8 +116,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
 
+        // Load Database (Gasstation)
+        List<Gasstation> gasstationList = initLoadGasstationDatabase();
+
         // Add Parkinglot, Gasstation Marker
-        addParkinglotMarker(parkinglotList);
+        addParkinglotMarker(parkinglotList, gasstationList);
 
     }
 
@@ -188,14 +193,22 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     };
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
-        DatabaseHelper parkinglotDatabaseHelper = new DatabaseHelper(getApplicationContext());
+        ParkinglotDatabaseHelper parkinglotDatabaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
         parkinglotDatabaseHelper.OpenDatabaseFile();
 
         List<Parkinglot> parkinglotList = parkinglotDatabaseHelper.getTableData();
         return parkinglotList;
     }
 
-    private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
+    private List<Gasstation> initLoadGasstationDatabase() {
+        GasstationDatabaseHelper gasstationDatabaseHelper = new GasstationDatabaseHelper(getApplicationContext());
+        gasstationDatabaseHelper.OpenDatabaseFile();
+
+        List<Gasstation> gasstationList = gasstationDatabaseHelper.getTableData();
+        return gasstationList;
+    }
+
+    private void addParkinglotMarker(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
         Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_blue);
@@ -223,6 +236,31 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             tMapMarkerItem.setAutoCalloutVisible(false);
 
             tMapView.addMarkerItem("parkinglotMarker" + i, tMapMarkerItem);
+
+        }
+
+        for (int i = 0; i < gasstationList.size(); i++) {
+
+            String title = gasstationList.get(i).name;
+            String subTitle = gasstationList.get(i).addr;
+            double latitude = gasstationList.get(i).latitude;
+            double longitude = gasstationList.get(i).longitude;
+
+            TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
+
+            TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
+            tMapMarkerItem.setIcon(bitmap2);
+            tMapMarkerItem.setPosition(0.5f, 1.0f);
+            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
+            tMapMarkerItem.setTMapPoint(tMapPoint);
+            tMapMarkerItem.setName(title);
+
+            tMapMarkerItem.setCanShowCallout(true);
+            tMapMarkerItem.setCalloutTitle(title);
+            tMapMarkerItem.setCalloutSubTitle(subTitle);
+            tMapMarkerItem.setAutoCalloutVisible(false);
+
+            tMapView.addMarkerItem("gasstationMarker" + i, tMapMarkerItem);
 
         }
     }

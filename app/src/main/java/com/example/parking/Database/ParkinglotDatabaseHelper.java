@@ -16,7 +16,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseHelper extends SQLiteOpenHelper{
+public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     // Error TAG
     protected static String TAG = "ParkinglotDatabaseHelper";
@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private final Context mContext;
     private SQLiteDatabase mDatabase;
 
-    public DatabaseHelper(Context context) {
+    public ParkinglotDatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
 
         if (Build.VERSION.SDK_INT >= 17) {
