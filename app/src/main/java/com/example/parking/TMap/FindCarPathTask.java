@@ -34,7 +34,7 @@ public class FindCarPathTask extends AsyncTask<TMapPoint, Void, Double> {
             tMapPolyLine.setLineColor(Color.BLUE);
             tMapPolyLine.setLineWidth(3);
 
-            tMapView.addTMapPolyLine("Line123", tMapPolyLine);
+            tMapView.addTMapPolyLine("Line", tMapPolyLine);
         }
 
         catch (Exception e) {
