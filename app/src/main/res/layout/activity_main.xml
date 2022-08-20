@@ -15,6 +15,13 @@
        android:orientation="vertical">
        <include layout="@layout/toolbar_main"/>
 
+       <TextView
+           android:id="@+id/nearbyPlace"
+           android:layout_width="match_parent"
+           android:layout_height="100dp"
+           android:text="가장 가까운 곳 추천"
+           android:gravity="center"/>
+
    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView

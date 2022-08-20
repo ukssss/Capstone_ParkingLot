@@ -27,12 +27,14 @@ import com.example.parking.TMap.FindElapsedTimeTask;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.skt.Tmap.poi_item.TMapPOIItem;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         linearLayoutTMap.addView(tMapView);
 
         // TMapView Setting
-        tMapView.setOnClickListenerCallBack(mOnClickListenerCallback);
+        tMapView.setCenterPoint(129.0600331, 35.1578157);
         tMapView.setZoomLevel(15);
         tMapView.setIconVisibility(true);
         tMapView.setOnCalloutRightButtonClickListener(mOnCalloutRightButtonClickCallback);
@@ -132,25 +134,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         nowLatitude = location.getLatitude();
     }
 
-    TMapView.OnClickListenerCallback mOnClickListenerCallback = new TMapView.OnClickListenerCallback() {
-        @Override
-        public boolean onPressEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
-            double latitude = tMapPoint.getLatitude();
-            double longitude = tMapPoint.getLongitude();
-
-            return false;
-        }
-
-        @Override
-        public boolean onPressUpEvent(ArrayList<TMapMarkerItem> arrayList, ArrayList<TMapPOIItem> arrayList1, TMapPoint tMapPoint, PointF pointF) {
-            return false;
-        }
-    };
 
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
+            TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
+            FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
@@ -159,9 +149,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 nRightButtonCount++;
             }
             else if (nRightButtonCount == 1) {
-                TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
-
-                FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
                 findCarPathTask.execute(tMapPointStart, tMapPoint);
 
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
@@ -184,8 +171,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
 
             else if (nRightButtonCount == 2) {
+                tMapView.removeTMapPolyLine("Line");
+
                 tMapView.setZoomLevel(15);
                 Toast.makeText(mContext,"정상적으로 도착하셨습니다", Toast.LENGTH_SHORT).show();
+
+
 
                 nRightButtonCount = 0;
             }
@@ -264,6 +255,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
     }
+
+//    private Comparator<Parkinglot> parkinglotComparator() {
+//        Comparator<Parkinglot> comparator = (sort1, sort2) -> {
+//            return Double.compare(sort1.distance, sort2.distance);
+//        };
+//
+//        return comparator;
+//    }
 
 
 }
