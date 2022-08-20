@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.parking.Database.Gasstation;
 import com.example.parking.Database.GasstationDatabaseHelper;
@@ -39,6 +40,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private Spinner typeSp;
     private Spinner divSp;
+    private TextView listInfo;
     private String type;
     private String div;
 
@@ -106,6 +108,10 @@ public class MainActivity2 extends AppCompatActivity {
     public void btnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
+                listInfo = (TextView) findViewById(R.id.listInfo);
+                listInfo.setText("부산광역시 " + div + " " + type + "의 검색 결과입니다" );
+
+                recyclerView = findViewById(R.id.recyclerView);
                 recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.setAdapter(adapter);
         }
@@ -113,15 +119,36 @@ public class MainActivity2 extends AppCompatActivity {
 
     public void setSpinner(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
         typeSp = findViewById(R.id.type_sp);
+        divSp = findViewById(R.id.div_sp);
         typeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 type = typeSp.getSelectedItem().toString();
                 if (type.equals("주차장")) {
-                    initializedParkinglotRecycler(parkinglotList);
+                    divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            div = divSp.getSelectedItem().toString();
+                            initializedParkinglotRecycler(parkinglotList);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {}
+                    });
+
+
                 }
                 else if (type.equals("주유소")) {
-                    initializedGasstationRecycler(gasstationList);
+                    divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            div = divSp.getSelectedItem().toString();
+                            initializedGasstationRecycler(gasstationList);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {}
+                    });
                 }
             }
 
@@ -131,12 +158,14 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
-        recyclerView = findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
+
         for (int i = 0; i < parkinglotList.size(); i++) {
-            parkingAdapter.addItems(parkinglotList.get(i));
+            if (parkinglotList.get(i).div.equals(div)) {
+                parkingAdapter.addItems(parkinglotList.get(i));
+            }
         }
 
         adapter = parkingAdapter;
@@ -144,12 +173,13 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void initializedGasstationRecycler(List<Gasstation> gasstationList) {
-        recyclerView = findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(this);
         gasstationAdapter = new GasstationRecyclerAdapter();
 
         for (int i = 0; i < gasstationList.size(); i++) {
-            gasstationAdapter.addItems(gasstationList.get(i));
+            if (gasstationList.get(i).div.equals(div)) {
+                gasstationAdapter.addItems(gasstationList.get(i));
+            }
         }
 
         adapter = gasstationAdapter;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="행정구역">
+        <item>-지역 선택-</item>
         <item>중구</item>
         <item>서구</item>
         <item>동구</item>
@@ -20,6 +21,7 @@
     </string-array>
 
     <string-array name="유형">
+        <item>-유형 선택-</item>
         <item>주차장</item>
         <item>주유소</item>
     </string-array>
