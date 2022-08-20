@@ -1,4 +1,4 @@
-package com.example.parking;
+package com.example.parking.Layout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,10 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
+import com.example.parking.Activity.MainActivity;
+import com.example.parking.Activity.MainActivity2;
+import com.example.parking.Activity.MainActivity3;
+import com.example.parking.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class NavigationViewHelper {

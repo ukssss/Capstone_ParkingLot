@@ -1,4 +1,4 @@
-package com.example.parking;
+package com.example.parking.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -11,12 +11,19 @@ import android.graphics.PointF;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.parking.Database.Gasstation;
+import com.example.parking.Database.GasstationDatabaseHelper;
+import com.example.parking.Database.ParkinglotDatabaseHelper;
+import com.example.parking.Layout.NavigationViewHelper;
+import com.example.parking.Database.Parkinglot;
+import com.example.parking.R;
+import com.example.parking.TMap.FindCarPathTask;
+import com.example.parking.TMap.FindElapsedTimeTask;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
