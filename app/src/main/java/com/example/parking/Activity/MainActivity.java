@@ -174,15 +174,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 minAddr = addr;
                 minDiv = div;
             }
+
         }
 
         textView.setText(
                 "주차장명 : " + minName + "\n" +
                 "주소 : " + minAddr + "\n" +
-                "행정구역 : " + minDiv + "\n"
+                "행정구역 : " + minDiv
         );
-
-
 
     }
 
