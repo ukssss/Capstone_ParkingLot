@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parking.Database.Gasstation;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     private Context mContext = MainActivity.this;
     private ImageView imageView;
+    private TextView textView;
     private DrawerLayout drawerLayout;
     private NavigationView nav;
 
@@ -54,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     public int nRightButtonCount = 0;
     public double nowLongitude;
     public double nowLatitude;
+
+    public double distance;
+    public double minDistance;
+    public String minName;
+    public String minAddr;
+    public String minDiv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +91,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private void init() {
         nav = findViewById(R.id.nav);
     }
-
-    // T Map
 
     private void setTMapAuth() {
         tMapView = new TMapView(this);
@@ -121,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // Load Database (Gasstation)
         List<Gasstation> gasstationList = initLoadGasstationDatabase();
 
+        // Nearby Place
+        findNearbyPlace(parkinglotList, gasstationList);
+
         // Add Parkinglot, Gasstation Marker
         addParkinglotMarker(parkinglotList, gasstationList);
 
@@ -132,6 +141,49 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
         nowLongitude = location.getLongitude();
         nowLatitude = location.getLatitude();
+    }
+
+    public void findNearbyPlace(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+        textView = (TextView) findViewById(R.id.nearbyPlace);
+
+        Location locationA = new Location( "start");
+        Location locationB = new Location( "destination");
+        locationA.setLatitude(nowLatitude);
+        locationA.setLongitude(nowLongitude);
+
+        for (int i = 0; i < parkinglotList.size(); i++) {
+
+            String name = parkinglotList.get(i).name;
+            String addr = parkinglotList.get(i).addr;
+            String div =  parkinglotList.get(i).div;
+            double latitude = parkinglotList.get(i).latitude;
+            double longitude = parkinglotList.get(i).longitude;
+
+            locationB.setLatitude(latitude);
+            locationB.setLongitude(longitude);
+
+            distance = locationA.distanceTo(locationB);
+
+            if (i == 0) {
+                minDistance = distance;
+            }
+
+            else if (distance < minDistance) {
+                minDistance = distance;
+                minName = name;
+                minAddr = addr;
+                minDiv = div;
+            }
+        }
+
+        textView.setText(
+                "주차장명 : " + minName + "\n" +
+                "주소 : " + minAddr + "\n" +
+                "행정구역 : " + minDiv + "\n"
+        );
+
+
+
     }
 
 
@@ -153,7 +205,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
                 tMapView.setZoomLevel(17);
-                Toast.makeText(mContext,"도착하시면 빨간핀을 한번 더 눌러주세요", Toast.LENGTH_SHORT).show();
                 nRightButtonCount++;
 
                 try {
@@ -174,9 +225,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 tMapView.removeTMapPolyLine("Line");
 
                 tMapView.setZoomLevel(15);
-                Toast.makeText(mContext,"정상적으로 도착하셨습니다", Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
 
                 nRightButtonCount = 0;
             }
@@ -255,14 +304,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
     }
-
-//    private Comparator<Parkinglot> parkinglotComparator() {
-//        Comparator<Parkinglot> comparator = (sort1, sort2) -> {
-//            return Double.compare(sort1.distance, sort2.distance);
-//        };
-//
-//        return comparator;
-//    }
 
 
 }

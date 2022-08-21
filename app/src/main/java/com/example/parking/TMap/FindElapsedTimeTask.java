@@ -48,6 +48,7 @@ public class FindElapsedTimeTask extends AsyncTask<String, Void, String> {
         String strTime = MinuteToSecond(Integer.parseInt(time));
 
         Toast.makeText(context, "시간 : " + strTime + "", Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"도착하시면 빨간핀을 한번 더 눌러주세요", Toast.LENGTH_SHORT).show();
     }
 
     @Override
