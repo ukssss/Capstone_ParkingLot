@@ -174,15 +174,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                 minAddr = addr;
                 minDiv = div;
             }
+
         }
 
         textView.setText(
-                "주차장명 : " + minName + "\n" +
-                "주소 : " + minAddr + "\n" +
-                "행정구역 : " + minDiv + "\n"
+                " 주차장명 : " + minName + "\n" +
+                " 주소 : " + minAddr + "\n" +
+                " 행정구역 : " + minDiv
         );
-
-
 
     }
 
@@ -190,12 +189,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
+
+            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_yellow);
+            Bitmap stop = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_orange);
+            Bitmap wait = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_red);
+
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
             TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
             FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
+                tMapMarkerItem.setCalloutRightButtonImage(start);
                 Toast.makeText(mContext,"목적지로 설정하려면 빨간핀을 눌러주세요", Toast.LENGTH_SHORT).show();
 
                 nRightButtonCount++;
@@ -205,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
                 tMapView.setZoomLevel(17);
+
+                tMapMarkerItem.setCalloutRightButtonImage(stop);
                 nRightButtonCount++;
 
                 try {
@@ -223,10 +230,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             else if (nRightButtonCount == 2) {
                 tMapView.removeTMapPolyLine("Line");
-
                 tMapView.setZoomLevel(15);
-                Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
 
+                tMapMarkerItem.setCalloutRightButtonImage(wait);
+                Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
                 nRightButtonCount = 0;
             }
         }
@@ -252,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
         Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_blue);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_red);
+        Bitmap wait = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_red);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
@@ -266,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
             tMapMarkerItem.setIcon(bitmap1);
             tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
+            tMapMarkerItem.setCalloutRightButtonImage(wait);
             tMapMarkerItem.setTMapPoint(tMapPoint);
             tMapMarkerItem.setName(title);
 
@@ -291,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
             tMapMarkerItem.setIcon(bitmap2);
             tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
+            tMapMarkerItem.setCalloutRightButtonImage(wait);
             tMapMarkerItem.setTMapPoint(tMapPoint);
             tMapMarkerItem.setName(title);
 
