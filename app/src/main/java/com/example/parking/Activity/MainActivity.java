@@ -196,13 +196,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
 
-<<<<<<< HEAD
-        textView.setText(
-                "주차장명 : " + minName + "\n" +
-                "주소 : " + minAddr + "\n" +
-                "행정구역 : " + minDiv
-        );
-=======
+
         if (minDistance < 1000) {
             textView.setText(
                     " 주차장명 : " + minName + "\n" +
@@ -214,8 +208,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         else {
             textView.setText("근처에 가까운 장소가 존재하지 않습니다");
         }
-
->>>>>>> 89c8ecb3ace9b01866545435d2838b7a1310cd92
 
     }
 

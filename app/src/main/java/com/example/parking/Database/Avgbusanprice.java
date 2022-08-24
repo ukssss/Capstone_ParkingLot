@@ -1,6 +1,6 @@
 package com.example.parking.Database;
 
-public class Avgallprice {
+public class Avgbusanprice {
 
     String SIDONM;
     String PRODCD;
