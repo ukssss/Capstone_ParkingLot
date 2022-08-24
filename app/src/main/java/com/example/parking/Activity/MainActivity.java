@@ -1,16 +1,21 @@
 package com.example.parking.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PointF;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,14 +33,10 @@ import com.example.parking.TMap.FindElapsedTimeTask;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
-import com.skt.Tmap.TMapPolyLine;
 import com.skt.Tmap.TMapView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.skt.Tmap.poi_item.TMapPOIItem;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements TMapGpsManager.onLocationChangedCallback {
@@ -54,9 +55,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
     public int nRightButtonCount = 0;
-    public double nowLongitude;
     public double nowLatitude;
+    public double nowLongitude;
 
+    // GPS, Distance measurement
     public double distance;
     public double minDistance;
     public String minName;
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // Request For GPS Permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
         // GPS using T Map
@@ -132,7 +134,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // Add Parkinglot, Gasstation Marker
         addParkinglotMarker(parkinglotList, gasstationList);
-
     }
 
     @Override
@@ -144,10 +145,28 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     public void findNearbyPlace(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // 권한 확인
+            return;
+        }
+        else {
+            // 가장 최근 위치정보 조회
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                nowLatitude = location.getLatitude();
+                nowLongitude = location.getLongitude();
+            }
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, gpsLocationListener);
+
         textView = (TextView) findViewById(R.id.nearbyPlace);
 
         Location locationA = new Location( "start");
         Location locationB = new Location( "destination");
+
         locationA.setLatitude(nowLatitude);
         locationA.setLongitude(nowLongitude);
 
@@ -177,14 +196,31 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
 
-        textView.setText(
-                "주차장명 : " + minName + "\n" +
-                "주소 : " + minAddr + "\n" +
-                "행정구역 : " + minDiv
-        );
+        if (minDistance < 1000) {
+            textView.setText(
+                    " 주차장명 : " + minName + "\n" +
+                    " 주소 : " + minAddr + "\n" +
+                    " 행정구역 : " + minDiv
+            );
+        }
+
+        else {
+            textView.setText("근처에 가까운 장소가 존재하지 않습니다");
+        }
+
 
     }
 
+    final LocationListener gpsLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            nowLatitude = location.getLatitude();
+            nowLongitude = location.getLongitude();
+            Log.i("MyLocTest", "onLocationChanged() 호출되었습니다.");
+            Log.i("MyLocTest","내 위치는 Latitude :" + nowLatitude + " Longtitude : " + nowLongitude);
+
+        }
+    };
 
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
