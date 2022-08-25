@@ -15,11 +15,33 @@
        android:orientation="vertical">
        <include layout="@layout/toolbar_main"/>
 
-       <TextView
-           android:id="@+id/nearbyPlace"
+
+       <LinearLayout
            android:layout_width="match_parent"
-           android:layout_height="100dp"
-           android:gravity="center_vertical"/>
+           android:layout_height="60dp"
+           android:orientation="horizontal">
+
+           <Button
+               android:id="@+id/parkinglotBtn"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="주차장"
+               android:layout_weight="1" />
+
+           <Button
+               android:id="@+id/gasstationBtn"
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="주유소"
+               android:layout_weight="1"/>
+
+           <Button
+               android:layout_width="wrap_content"
+               android:layout_height="match_parent"
+               android:text="정비소"
+               android:layout_weight="1"/>
+
+       </LinearLayout>
 
    </LinearLayout>
 
