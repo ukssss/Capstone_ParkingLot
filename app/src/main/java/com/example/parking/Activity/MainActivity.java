@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         Button parkinglotBtn = (Button) findViewById(R.id.parkinglotBtn);
         Button gasstationBtn = (Button) findViewById(R.id.gasstationBtn);
+        Button repairshopBtn = (Button) findViewById(R.id.repairshopBtn);
 
         parkinglotBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -157,6 +158,12 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
                     nGasstationButtonCount = 0;
                 }
 
+            }
+        });
+
+        repairshopBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Toast.makeText(mContext, "구축 예정입니다 :)", Toast.LENGTH_SHORT).show();
             }
         });
     }
