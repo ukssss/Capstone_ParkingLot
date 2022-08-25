@@ -1,16 +1,30 @@
 package com.example.parking.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.parking.ConvertGeoPoint.GeoPoint;
+import com.example.parking.ConvertGeoPoint.GeoTrans;
 import com.example.parking.Layout.NavigationViewHelper;
 import com.example.parking.R;
 import com.google.android.material.navigation.NavigationView;
@@ -33,6 +47,13 @@ public class MainActivity3 extends AppCompatActivity {
 
     private TextView textView;
     private static String API_Key = "F220822311";
+
+    private TextView test;
+    private TextView aroundAll;
+
+    public double nowLatitude;
+    public double nowLongitude;
+
     String pregasolinePrice;
     String gasolinePrice;
     String dieselPrice;
@@ -57,7 +78,72 @@ public class MainActivity3 extends AppCompatActivity {
 
         avgBusanPrice();
 
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Button locationBtn = (Button) findViewById(R.id.locationBtn);
+        test = (TextView) findViewById(R.id.test);
+        aroundAll = (TextView) findViewById(R.id.aroundAll);
+
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( Build.VERSION.SDK_INT >= 23 &&
+                    ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION )
+                            != PackageManager.PERMISSION_GRANTED ) {
+                    ActivityCompat.requestPermissions( MainActivity3.this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION}, 0 );
+                    }
+                else {
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        String provider = location.getProvider();
+                        nowLatitude = location.getLatitude();
+                        nowLongitude = location.getLongitude();
+
+                        GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
+                        GeoPoint geo_trans = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
+                        aroundAll.setText(geo_trans.getX() + ", " + geo_trans.getY() );
+
+                        test.setText(
+                                "위치정보 : " + provider + "\n" +
+                                "위도 : " + nowLatitude + "\n" +
+                                "경도 : " + nowLongitude + "\n"
+                        );
+
+                    }
+
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsLocationListener);
+                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, gpsLocationListener);
+
+                }
+
+
+            }
+        });
     }
+
+    final LocationListener gpsLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            String provider = location.getProvider();
+            nowLatitude = location.getLatitude();
+            nowLongitude = location.getLongitude();
+
+            GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
+            GeoPoint geo_trans = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
+            aroundAll.setText(geo_trans.getX() + ", " + geo_trans.getY() );
+
+            test.setText(
+                    "위치정보 : " + provider + "\n" +
+                    "위도 : " + nowLatitude + "\n" +
+                    "경도 : " + nowLongitude + "\n"
+            );
+
+
+        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onProviderEnabled(String provider) {}
+        public void onProviderDisabled(String provider) {}
+    };
 
     private void init() {
         nav = findViewById(R.id.nav);

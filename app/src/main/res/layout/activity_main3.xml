@@ -134,33 +134,42 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="320dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="부산광역시 남구 용소로 48 근처의 주유소 목록입니다" />
+
+            <Button
+                android:id="@+id/locationBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="새로고침"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/test"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+
+            <TextView
+                android:id="@+id/aroundAll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
 
-
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal">-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/div_sp"-->
-<!--                android:layout_width="200dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:hint="행정구역"-->
-<!--                android:spinnerMode="dialog"-->
-<!--                android:entries="@array/행정구역"/>-->
-
-<!--            <Button-->
-<!--                android:id="@+id/button"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:onClick="btnClick"-->
-<!--                android:text="검색"-->
-<!--                android:textSize="12sp" />-->
-
-<!--        </LinearLayout>-->
-
+        </LinearLayout>
 
     </LinearLayout>
 
