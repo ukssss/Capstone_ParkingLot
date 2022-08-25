@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,12 +44,14 @@ public class MainActivity2 extends AppCompatActivity {
     private TextView listInfo;
     private String type;
     private String div;
+    private Button button;
 
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ParkinglotRecyclerAdapter parkingAdapter;
     private GasstationRecyclerAdapter gasstationAdapter;
     private RecyclerView.Adapter adapter;
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -71,6 +74,8 @@ public class MainActivity2 extends AppCompatActivity {
         List<Gasstation> gasstationList = initLoadGasstationDatabase();
 
         setSpinner(parkinglotList, gasstationList);
+
+        button = (Button) findViewById(R.id.button);
 
     }
 
@@ -115,6 +120,7 @@ public class MainActivity2 extends AppCompatActivity {
                 recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.setAdapter(adapter);
         }
+
     }
 
     public void setSpinner(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {

@@ -17,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -54,16 +56,14 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private TMapGpsManager tMapGPS = null;
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
+    public int nParkinglotButtonCount = 0;
+    public int nGasstationButtonCount = 0;
     public int nRightButtonCount = 0;
+
     public double nowLatitude;
     public double nowLongitude;
 
-    // GPS, Distance measurement
-    public double distance;
-    public double minDistance;
-    public String minName;
-    public String minAddr;
-    public String minDiv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,11 +129,36 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         // Load Database (Gasstation)
         List<Gasstation> gasstationList = initLoadGasstationDatabase();
 
-        // Nearby Place
-        findNearbyPlace(parkinglotList, gasstationList);
+        Button parkinglotBtn = (Button) findViewById(R.id.parkinglotBtn);
+        Button gasstationBtn = (Button) findViewById(R.id.gasstationBtn);
 
-        // Add Parkinglot, Gasstation Marker
-        addParkinglotMarker(parkinglotList, gasstationList);
+        parkinglotBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (nParkinglotButtonCount == 0) {
+                    addParkinglotMarker(parkinglotList);
+                    nParkinglotButtonCount++;
+                }
+                else if (nParkinglotButtonCount == 1) {
+                    removeParkinglotMarker(parkinglotList);
+                    nParkinglotButtonCount = 0;
+                }
+
+            }
+        });
+
+        gasstationBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (nGasstationButtonCount == 0){
+                    addGasstationMarker(gasstationList);
+                    nGasstationButtonCount++;
+                }
+                else if (nGasstationButtonCount == 1) {
+                    removeGasstationMarker(gasstationList);
+                    nGasstationButtonCount = 0;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -144,93 +169,20 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         nowLatitude = location.getLatitude();
     }
 
-    public void findNearbyPlace(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            // 권한 확인
-            return;
-        }
-        else {
-            // 가장 최근 위치정보 조회
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location != null) {
-                nowLatitude = location.getLatitude();
-                nowLongitude = location.getLongitude();
-            }
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsLocationListener);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, gpsLocationListener);
-
-        textView = (TextView) findViewById(R.id.nearbyPlace);
-
-        Location locationA = new Location( "start");
-        Location locationB = new Location( "destination");
-
-        locationA.setLatitude(nowLatitude);
-        locationA.setLongitude(nowLongitude);
-
-        for (int i = 0; i < parkinglotList.size(); i++) {
-
-            String name = parkinglotList.get(i).name;
-            String addr = parkinglotList.get(i).addr;
-            String div =  parkinglotList.get(i).div;
-            double latitude = parkinglotList.get(i).latitude;
-            double longitude = parkinglotList.get(i).longitude;
-
-            locationB.setLatitude(latitude);
-            locationB.setLongitude(longitude);
-
-            distance = locationA.distanceTo(locationB);
-
-            if (i == 0) {
-                minDistance = distance;
-            }
-
-            else if (distance < minDistance) {
-                minDistance = distance;
-                minName = name;
-                minAddr = addr;
-                minDiv = div;
-            }
-
-        }
-
-
-        if (minDistance < 1000) {
-            textView.setText(
-                    " 주차장명 : " + minName + "\n" +
-                    " 주소 : " + minAddr + "\n" +
-                    " 행정구역 : " + minDiv
-            );
-        }
-
-        else {
-            textView.setText("근처에 가까운 장소가 존재하지 않습니다");
-        }
-
-    }
-
-    final LocationListener gpsLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
-            nowLatitude = location.getLatitude();
-            nowLongitude = location.getLongitude();
-            Log.i("MyLocTest", "onLocationChanged() 호출되었습니다.");
-            Log.i("MyLocTest","내 위치는 Latitude :" + nowLatitude + " Longtitude : " + nowLongitude);
-
-        }
-    };
-
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
+            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
+            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.arrive);
+            Bitmap destination = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
             TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
             FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
+                tMapMarkerItem.setCalloutRightButtonImage(start);
                 Toast.makeText(mContext,"목적지로 설정하려면 빨간핀을 눌러주세요", Toast.LENGTH_SHORT).show();
 
                 nRightButtonCount++;
@@ -238,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             else if (nRightButtonCount == 1) {
                 findCarPathTask.execute(tMapPointStart, tMapPoint);
 
+                tMapMarkerItem.setCalloutRightButtonImage(arrive);
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
                 tMapView.setZoomLevel(17);
                 nRightButtonCount++;
@@ -258,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             else if (nRightButtonCount == 2) {
                 tMapView.removeTMapPolyLine("Line");
+                tMapMarkerItem.setCalloutRightButtonImage(destination);
 
                 tMapView.setZoomLevel(15);
                 Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
@@ -283,11 +237,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         return gasstationList;
     }
 
-    private void addParkinglotMarker(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+    private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_blue);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_red);
+        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_parkinglot);
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
@@ -314,6 +267,18 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         }
 
+    }
+
+    private void removeParkinglotMarker(List<Parkinglot> parkinglotList) {
+        for (int i = 0; i < parkinglotList.size(); i++) {
+            tMapView.removeMarkerItem("parkinglotMarker" + i);
+        }
+    }
+
+    private void addGasstationMarker(List<Gasstation> gasstationList) {
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_gasstation);
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+
         for (int i = 0; i < gasstationList.size(); i++) {
 
             String title = gasstationList.get(i).name;
@@ -337,6 +302,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             tMapView.addMarkerItem("gasstationMarker" + i, tMapMarkerItem);
 
+        }
+
+    }
+
+    private void removeGasstationMarker(List<Gasstation> gasstationList) {
+        for (int i = 0; i < gasstationList.size(); i++) {
+            tMapView.removeMarkerItem("gasstationMarker" + i);
         }
     }
 
