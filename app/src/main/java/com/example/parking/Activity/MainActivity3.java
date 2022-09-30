@@ -100,8 +100,8 @@ public class MainActivity3 extends AppCompatActivity {
                         nowLongitude = location.getLongitude();
 
                         GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
-                        GeoPoint geo_trans = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
-                        aroundAll.setText(geo_trans.getX() + ", " + geo_trans.getY() );
+                        GeoPoint katec_pt = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
+                        aroundAll.setText(katec_pt.getX() + ", " + katec_pt.getY() );
 
                         test.setText(
                                 "위치정보 : " + provider + "\n" +
@@ -129,15 +129,14 @@ public class MainActivity3 extends AppCompatActivity {
             nowLongitude = location.getLongitude();
 
             GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
-            GeoPoint geo_trans = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
-            aroundAll.setText(geo_trans.getX() + ", " + geo_trans.getY() );
+            GeoPoint katec_pt = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
+            aroundAll.setText(katec_pt.getX() + ", " + katec_pt.getY() );
 
             test.setText(
                     "위치정보 : " + provider + "\n" +
                     "위도 : " + nowLatitude + "\n" +
                     "경도 : " + nowLongitude + "\n"
             );
-
 
         }
         public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -552,5 +551,13 @@ public class MainActivity3 extends AppCompatActivity {
 
     }//getXmlData method....
 
+//    String getAroundAllGasstation() {
+//        StringBuffer aroundAllBuffer = new StringBuffer();
+//
+//        String queryUrl="http://www.opinet.co.kr/api/aroundAll.do"
+//                + "&code=" + API_Key
+//                + "&sido=10"
+//                + "&prodcd=B034";
+//    }
 }
 
