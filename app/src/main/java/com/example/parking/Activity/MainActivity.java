@@ -57,13 +57,10 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
     public int nParkinglotButtonCount = 0;
-    public int nGasstationButtonCount = 0;
     public int nRightButtonCount = 0;
 
     public double nowLatitude;
     public double nowLongitude;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     }
 
     // Layout
-
     private void onClickDrawer() {
         imageView = findViewById(R.id.iv_menu);
         drawerLayout = findViewById(R.id.drawer);
@@ -125,47 +121,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
+        addParkinglotMarker(parkinglotList);
 
-        // Load Database (Gasstation)
-        List<Gasstation> gasstationList = initLoadGasstationDatabase();
-
-        Button parkinglotBtn = (Button) findViewById(R.id.parkinglotBtn);
-        Button gasstationBtn = (Button) findViewById(R.id.gasstationBtn);
-        Button repairshopBtn = (Button) findViewById(R.id.repairshopBtn);
-
-        parkinglotBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (nParkinglotButtonCount == 0) {
-                    addParkinglotMarker(parkinglotList);
-                    nParkinglotButtonCount++;
-                }
-                else if (nParkinglotButtonCount == 1) {
-                    removeParkinglotMarker(parkinglotList);
-                    nParkinglotButtonCount = 0;
-                }
-
-            }
-        });
-
-        gasstationBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (nGasstationButtonCount == 0){
-                    addGasstationMarker(gasstationList);
-                    nGasstationButtonCount++;
-                }
-                else if (nGasstationButtonCount == 1) {
-                    removeGasstationMarker(gasstationList);
-                    nGasstationButtonCount = 0;
-                }
-
-            }
-        });
-
-        repairshopBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(mContext, "구축 예정입니다 :)", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -236,14 +193,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         return parkinglotList;
     }
 
-    private List<Gasstation> initLoadGasstationDatabase() {
-        GasstationDatabaseHelper gasstationDatabaseHelper = new GasstationDatabaseHelper(getApplicationContext());
-        gasstationDatabaseHelper.OpenDatabaseFile();
-
-        List<Gasstation> gasstationList = gasstationDatabaseHelper.getTableData();
-        return gasstationList;
-    }
-
     private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_parkinglot);
@@ -275,50 +224,5 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
 
     }
-
-    private void removeParkinglotMarker(List<Parkinglot> parkinglotList) {
-        for (int i = 0; i < parkinglotList.size(); i++) {
-            tMapView.removeMarkerItem("parkinglotMarker" + i);
-        }
-    }
-
-    private void addGasstationMarker(List<Gasstation> gasstationList) {
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_gasstation);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
-
-        for (int i = 0; i < gasstationList.size(); i++) {
-
-            String title = gasstationList.get(i).name;
-            String subTitle = gasstationList.get(i).addr;
-            double latitude = gasstationList.get(i).latitude;
-            double longitude = gasstationList.get(i).longitude;
-
-            TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
-
-            TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-            tMapMarkerItem.setIcon(bitmap2);
-            tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
-            tMapMarkerItem.setTMapPoint(tMapPoint);
-            tMapMarkerItem.setName(title);
-
-            tMapMarkerItem.setCanShowCallout(true);
-            tMapMarkerItem.setCalloutTitle(title);
-            tMapMarkerItem.setCalloutSubTitle(subTitle);
-            tMapMarkerItem.setAutoCalloutVisible(false);
-
-            tMapView.addMarkerItem("gasstationMarker" + i, tMapMarkerItem);
-
-        }
-
-    }
-
-    private void removeGasstationMarker(List<Gasstation> gasstationList) {
-        for (int i = 0; i < gasstationList.size(); i++) {
-            tMapView.removeMarkerItem("gasstationMarker" + i);
-        }
-    }
-
-
 }
 
