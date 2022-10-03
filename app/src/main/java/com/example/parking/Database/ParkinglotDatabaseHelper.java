@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
@@ -102,6 +103,9 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     public List getTableData() {
 
+        Integer arr_random_num;
+        Random random = new Random();
+
         try {
             List mList = new ArrayList();
 
@@ -126,7 +130,8 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     parkinglot.setLatitude(mCursor.getDouble(8));
                     parkinglot.setLongitude(mCursor.getDouble(9));
 
-                    parkinglot.setParkStat(mCursor.getString(10));
+                    arr_random_num = random.nextInt(50) + 1;
+                    parkinglot.setParkStat(arr_random_num);
 
                     mList.add(parkinglot);
                 }
