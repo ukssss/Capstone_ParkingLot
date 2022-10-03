@@ -68,6 +68,14 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/parkStat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="주차가능대수"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
 
 
     </LinearLayout>

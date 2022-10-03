@@ -1,31 +1,21 @@
 package com.example.parking.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.parking.Database.Gasstation;
-import com.example.parking.Database.GasstationDatabaseHelper;
 import com.example.parking.Database.ParkinglotDatabaseHelper;
 import com.example.parking.Layout.NavigationViewHelper;
 import com.example.parking.Database.Parkinglot;
@@ -56,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private TMapGpsManager tMapGPS = null;
     private static String API_Key = "l7xxea74c8831aaf43e78a8bd6ca10c4128c";
 
-    public int nParkinglotButtonCount = 0;
     public int nRightButtonCount = 0;
 
     public double nowLatitude;

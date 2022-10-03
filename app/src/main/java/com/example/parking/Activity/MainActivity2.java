@@ -1,6 +1,5 @@
 package com.example.parking.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,10 +17,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.parking.Database.Gasstation;
-import com.example.parking.Database.GasstationDatabaseHelper;
 import com.example.parking.Database.ParkinglotDatabaseHelper;
-import com.example.parking.Layout.GasstationRecyclerAdapter;
 import com.example.parking.Layout.NavigationViewHelper;
 import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
@@ -49,7 +45,6 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ParkinglotRecyclerAdapter parkingAdapter;
-    private GasstationRecyclerAdapter gasstationAdapter;
     private RecyclerView.Adapter adapter;
 
 
@@ -71,9 +66,7 @@ public class MainActivity2 extends AppCompatActivity {
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
 
-        List<Gasstation> gasstationList = initLoadGasstationDatabase();
-
-        setSpinner(parkinglotList, gasstationList);
+        setSpinner(parkinglotList);
 
         button = (Button) findViewById(R.id.button);
 
@@ -101,15 +94,6 @@ public class MainActivity2 extends AppCompatActivity {
         return parkinglotList;
     }
 
-    private List<Gasstation> initLoadGasstationDatabase() {
-        GasstationDatabaseHelper gasstationDatabaseHelper = new GasstationDatabaseHelper(getApplicationContext());
-        gasstationDatabaseHelper.OpenDatabaseFile();
-
-        List<Gasstation> gasstationList = gasstationDatabaseHelper.getTableData();
-
-        return gasstationList;
-    }
-
     public void btnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
@@ -123,7 +107,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
-    public void setSpinner(List<Parkinglot> parkinglotList, List<Gasstation> gasstationList) {
+    public void setSpinner(List<Parkinglot> parkinglotList) {
         typeSp = findViewById(R.id.type_sp);
         divSp = findViewById(R.id.div_sp);
         typeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -144,18 +128,6 @@ public class MainActivity2 extends AppCompatActivity {
 
 
                 }
-                else if (type.equals("주유소")) {
-                    divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            div = divSp.getSelectedItem().toString();
-                            initializedGasstationRecycler(gasstationList);
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {}
-                    });
-                }
             }
 
             @Override
@@ -167,7 +139,6 @@ public class MainActivity2 extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
-
         for (int i = 0; i < parkinglotList.size(); i++) {
             if (parkinglotList.get(i).div.equals(div)) {
                 parkingAdapter.addItems(parkinglotList.get(i));
@@ -175,20 +146,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
         adapter = parkingAdapter;
-
-    }
-
-    private void initializedGasstationRecycler(List<Gasstation> gasstationList) {
-        linearLayoutManager = new LinearLayoutManager(this);
-        gasstationAdapter = new GasstationRecyclerAdapter();
-
-        for (int i = 0; i < gasstationList.size(); i++) {
-            if (gasstationList.get(i).div.equals(div)) {
-                gasstationAdapter.addItems(gasstationList.get(i));
-            }
-        }
-
-        adapter = gasstationAdapter;
 
     }
 }

@@ -10,6 +10,7 @@ public class Parkinglot {
     public String operDay;
     public String parkingchargeInfo;
     public String phoneNumber;
+    public String parkStat;
 
     public double latitude;                 // 위도
     public double longitude;                // 경도
@@ -23,9 +24,11 @@ public class Parkinglot {
     public void setOperDay(String operDay) { this.operDay = operDay; }
     public void setParkingchargeInfo(String parkingchargeInfo) { this.parkingchargeInfo = parkingchargeInfo; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setParkStat(String parkStat) { this.parkStat = parkStat; }
 
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
+
 
     // GET
     public int getId() { return this.id; }
@@ -36,9 +39,11 @@ public class Parkinglot {
     public String getOperDay() { return this.operDay; }
     public String getParkingchargeInfo() { return this.parkingchargeInfo; }
     public String getPhoneNumber() { return this.phoneNumber; }
+    public String getParkStat() { return this.parkStat; }
 
     public double getLatitude() { return this.latitude; }
     public double getLongitude() { return this.longitude; }
+
 
 }
 

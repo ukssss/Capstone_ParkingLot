@@ -123,9 +123,10 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     parkinglot.setParkingchargeInfo(mCursor.getString(6));
                     parkinglot.setPhoneNumber(mCursor.getString(7));
 
-
                     parkinglot.setLatitude(mCursor.getDouble(8));
                     parkinglot.setLongitude(mCursor.getDouble(9));
+
+                    parkinglot.setParkStat(mCursor.getString(10));
 
                     mList.add(parkinglot);
                 }

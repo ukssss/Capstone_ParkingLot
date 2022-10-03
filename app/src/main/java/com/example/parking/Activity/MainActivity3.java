@@ -23,8 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.parking.ConvertGeoPoint.GeoPoint;
-import com.example.parking.ConvertGeoPoint.GeoTrans;
 import com.example.parking.Layout.NavigationViewHelper;
 import com.example.parking.R;
 import com.google.android.material.navigation.NavigationView;
@@ -83,66 +81,8 @@ public class MainActivity3 extends AppCompatActivity {
         test = (TextView) findViewById(R.id.test);
         aroundAll = (TextView) findViewById(R.id.aroundAll);
 
-        locationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ( Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION )
-                            != PackageManager.PERMISSION_GRANTED ) {
-                    ActivityCompat.requestPermissions( MainActivity3.this, new String[] {
-                            Manifest.permission.ACCESS_FINE_LOCATION}, 0 );
-                    }
-                else {
-                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location != null) {
-                        String provider = location.getProvider();
-                        nowLatitude = location.getLatitude();
-                        nowLongitude = location.getLongitude();
 
-                        GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
-                        GeoPoint katec_pt = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
-                        aroundAll.setText(katec_pt.getX() + ", " + katec_pt.getY() );
-
-                        test.setText(
-                                "위치정보 : " + provider + "\n" +
-                                "위도 : " + nowLatitude + "\n" +
-                                "경도 : " + nowLongitude + "\n"
-                        );
-
-                    }
-
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, gpsLocationListener);
-                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, gpsLocationListener);
-
-                }
-
-
-            }
-        });
     }
-
-    final LocationListener gpsLocationListener = new LocationListener() {
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
-            String provider = location.getProvider();
-            nowLatitude = location.getLatitude();
-            nowLongitude = location.getLongitude();
-
-            GeoPoint in_pt = new GeoPoint(nowLongitude, nowLatitude);
-            GeoPoint katec_pt = GeoTrans.convert(GeoTrans.GEO, GeoTrans.KATEC, in_pt);
-            aroundAll.setText(katec_pt.getX() + ", " + katec_pt.getY() );
-
-            test.setText(
-                    "위치정보 : " + provider + "\n" +
-                    "위도 : " + nowLatitude + "\n" +
-                    "경도 : " + nowLongitude + "\n"
-            );
-
-        }
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-        public void onProviderEnabled(String provider) {}
-        public void onProviderDisabled(String provider) {}
-    };
 
     private void init() {
         nav = findViewById(R.id.nav);
