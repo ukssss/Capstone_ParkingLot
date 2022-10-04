@@ -103,14 +103,12 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     public List getTableData() {
 
-        Integer arr_random_num;
-        Random random = new Random();
-
         try {
             List mList = new ArrayList();
+            Integer arr_random_num;
+            Random random = new Random();
 
             String sql = "SELECT * FROM " + tableName;
-
             Cursor mCursor = mDatabase.rawQuery(sql, null);
 
             if (mCursor != null) {
@@ -126,7 +124,6 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     parkinglot.setOperDay(mCursor.getString(5));
                     parkinglot.setParkingchargeInfo(mCursor.getString(6));
                     parkinglot.setPhoneNumber(mCursor.getString(7));
-
                     parkinglot.setLatitude(mCursor.getDouble(8));
                     parkinglot.setLongitude(mCursor.getDouble(9));
 
@@ -147,13 +144,10 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
+    public void onCreate(SQLiteDatabase db) {}
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 }
+

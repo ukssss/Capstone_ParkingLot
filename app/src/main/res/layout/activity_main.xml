@@ -8,14 +8,31 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-   <LinearLayout
-       android:id="@+id/linearLayoutTmap"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:orientation="vertical">
-       <include layout="@layout/toolbar_main"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/toolbar_main"/>
 
-   </LinearLayout>
+        <FrameLayout
+            android:id="@+id/frameLayoutTmap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="20dp"
+                android:src="@drawable/gps_fixed" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav"
@@ -23,6 +40,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start|left"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu" />
+        app:menu="@menu/nav_menu" >
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

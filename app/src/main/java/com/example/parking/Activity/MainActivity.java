@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -86,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     private void initialize() {
         // T Map View Using Linear Layout
-        LinearLayout linearLayoutTMap = (LinearLayout) findViewById(R.id.linearLayoutTmap);
-        linearLayoutTMap.addView(tMapView);
+        FrameLayout frameLayoutTMap = (FrameLayout) findViewById(R.id.frameLayoutTmap);
+        frameLayoutTMap.addView(tMapView);
 
         // TMapView Setting
         tMapView.setCenterPoint(129.0600331, 35.1578157);
