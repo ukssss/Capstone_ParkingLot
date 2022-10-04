@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
 import com.example.parking.TMap.FindCarPathTask;
 import com.example.parking.TMap.FindElapsedTimeTask;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skt.Tmap.TMapGpsManager;
 import com.skt.Tmap.TMapMarkerItem;
 import com.skt.Tmap.TMapPoint;
@@ -38,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
     private Context mContext = MainActivity.this;
     private ImageView imageView;
-    private TextView textView;
     private DrawerLayout drawerLayout;
     private NavigationView nav;
+    private FloatingActionButton initTmap;
 
     // T Map
     private TMapView tMapView = null;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         init();
         onClickDrawer();
+        onClickFab();
         NavigationViewHelper.enableNavigation(mContext, nav);
 
         setTMapAuth();
@@ -74,6 +77,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         imageView.setOnClickListener((view -> {
             drawerLayout.openDrawer(Gravity.LEFT);
         }));
+    }
+
+    private void onClickFab() {
+        initTmap = findViewById(R.id.fabGPS);
+        initTmap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tMapView.setZoomLevel(15);
+                tMapView.setCenterPoint(nowLongitude, nowLatitude);
+            }
+        });
     }
 
     private void init() {
