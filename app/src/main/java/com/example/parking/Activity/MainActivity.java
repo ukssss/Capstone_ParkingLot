@@ -14,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private DrawerLayout drawerLayout;
     private NavigationView nav;
     private FloatingActionButton initTmap;
+    private FloatingActionButton initStop;
 
     // T Map
     private TMapView tMapView = null;
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         init();
         onClickDrawer();
-        onClickFab();
+        onClickFabGPS();
+        onClickFabStop();
         NavigationViewHelper.enableNavigation(mContext, nav);
 
         setTMapAuth();
@@ -79,12 +80,11 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }));
     }
 
-    private void onClickFab() {
+    private void onClickFabGPS() {
         initTmap = findViewById(R.id.fabGPS);
         initTmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tMapView.setZoomLevel(15);
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
             }
         });
@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
-            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
-            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.arrive);
-            Bitmap destination = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.marker_start);
+            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.marker_arrive);
+            Bitmap destination = BitmapFactory.decodeResource(getResources(), R.drawable.marker_destination);
 
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
             TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
@@ -189,6 +189,26 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }
     };
 
+    private void onClickFabStop() {
+        initStop = findViewById(R.id.fabStop);
+        initStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nRightButtonCount == 2) {
+                    tMapView.removeTMapPolyLine("Line");
+
+                    tMapView.setZoomLevel(15);
+                    Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
+
+                    nRightButtonCount = 0;
+                }
+                else {
+                    Toast.makeText(mContext, "목적지가 없습니다", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private List<Parkinglot> initLoadParkinglotDatabase() {
         ParkinglotDatabaseHelper parkinglotDatabaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
         parkinglotDatabaseHelper.OpenDatabaseFile();
@@ -200,7 +220,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_parkinglot);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_green);
+        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_orange);
+        Bitmap dest = BitmapFactory.decodeResource(getResources(), R.drawable.marker_destination);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
@@ -212,9 +234,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
 
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-            tMapMarkerItem.setIcon(bitmap1);
+
+            if (parkinglotList.get(i).parkStat > 30) {
+                tMapMarkerItem.setIcon(bitmap1);
+            }
+            else if (parkinglotList.get(i).parkStat > 10) {
+                tMapMarkerItem.setIcon(bitmap2);
+            }
+            else tMapMarkerItem.setIcon(bitmap3);
+
             tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
+            tMapMarkerItem.setCalloutRightButtonImage(dest);
             tMapMarkerItem.setTMapPoint(tMapPoint);
             tMapMarkerItem.setName(title);
 
