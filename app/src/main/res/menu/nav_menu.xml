@@ -6,18 +6,18 @@
     <item
         android:id="@+id/first_tab"
         android:title="Map"
-        android:icon="@drawable/nav_map"
+        android:icon="@drawable/map"
         app:showAsAction="always"/>
     <item
         android:id="@+id/second_tab"
         android:title="List"
-        android:icon="@drawable/nav_list"
+        android:icon="@drawable/parking"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/third_tab"
         android:title="Status"
-        android:icon="@drawable/nav_info"
+        android:icon="@drawable/info"
         app:showAsAction="always" />
 
 </menu>

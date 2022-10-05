@@ -20,24 +20,15 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabStop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_margin="20dp"
-                android:src="@drawable/fab_stop"
-                app:tint="@android:color/holo_red_light" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabGPS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="20dp"
-                android:src="@drawable/fab_gps"
-                app:tint="@android:color/white"/>
+                android:src="@drawable/gps_fixed" />
 
         </FrameLayout>
+
 
     </LinearLayout>
 
