@@ -14,8 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parking.Database.ParkinglotDatabaseHelper;
@@ -84,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         initTmap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tMapView.setZoomLevel(15);
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
             }
         });
@@ -140,9 +137,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
-            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.start);
-            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.arrive);
-            Bitmap destination = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.info_start);
+            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.info_arrive);
 
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
             TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
@@ -150,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             if (nRightButtonCount == 0) {
                 tMapView.setCenterPoint(tMapPoint.getLongitude(), tMapPoint.getLatitude());
-                tMapMarkerItem.setCalloutRightButtonImage(start);
                 Toast.makeText(mContext,"목적지로 설정하려면 빨간핀을 눌러주세요", Toast.LENGTH_SHORT).show();
 
                 nRightButtonCount++;
@@ -179,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             else if (nRightButtonCount == 2) {
                 tMapView.removeTMapPolyLine("Line");
-                tMapMarkerItem.setCalloutRightButtonImage(destination);
+                tMapMarkerItem.setCalloutRightButtonImage(start);
 
                 tMapView.setZoomLevel(15);
                 Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
@@ -200,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_parkinglot);
-        Bitmap bitmap3 = BitmapFactory.decodeResource(getResources(), R.drawable.destination);
+        Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.info_start);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
@@ -214,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
             tMapMarkerItem.setIcon(bitmap1);
             tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(bitmap3);
+            tMapMarkerItem.setCalloutRightButtonImage(start);
             tMapMarkerItem.setTMapPoint(tMapPoint);
             tMapMarkerItem.setName(title);
 
