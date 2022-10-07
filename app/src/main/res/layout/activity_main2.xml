@@ -21,16 +21,8 @@
             android:weightSum="10">
 
             <Spinner
-                android:id="@+id/type_sp"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:hint="유형"
-                android:spinnerMode="dialog"
-                android:entries="@array/유형"/>
-
-            <Spinner
                 android:id="@+id/div_sp"
-                android:layout_width="150dp"
+                android:layout_width="300dp"
                 android:layout_height="match_parent"
                 android:hint="행정구역"
                 android:spinnerMode="dialog"

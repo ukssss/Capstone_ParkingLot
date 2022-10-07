@@ -35,10 +35,8 @@ public class MainActivity2 extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView nav;
 
-    private Spinner typeSp;
     private Spinner divSp;
     private TextView listInfo;
-    private String type;
     private String div;
     private Button button;
 
@@ -65,11 +63,9 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
-
         setSpinner(parkinglotList);
 
-        button = (Button) findViewById(R.id.button);
-
+        initializedParkingRecyclerDefault(parkinglotList);
     }
 
     private void initNavigationView() {
@@ -94,11 +90,29 @@ public class MainActivity2 extends AppCompatActivity {
         return parkinglotList;
     }
 
+    public void initializedParkingRecyclerDefault(List<Parkinglot> parkinglotList) {
+        linearLayoutManager = new LinearLayoutManager(this);
+        parkingAdapter = new ParkinglotRecyclerAdapter();
+
+        for (int i = 0; i < parkinglotList.size(); i++) {
+            parkingAdapter.addItems(parkinglotList.get(i));
+        }
+
+        adapter = parkingAdapter;
+
+        listInfo = (TextView) findViewById(R.id.listInfo);
+        listInfo.setText("부산광역시 전체 주차장 검색 결과입니다");
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
     public void btnClick(View v) {
         switch (v.getId()) {
             case R.id.button:
                 listInfo = (TextView) findViewById(R.id.listInfo);
-                listInfo.setText("부산광역시 " + div + " " + type + "의 검색 결과입니다" );
+                listInfo.setText("부산광역시 " + div + " 주차장 검색 결과입니다");
 
                 recyclerView = findViewById(R.id.recyclerView);
                 recyclerView.setLayoutManager(linearLayoutManager);
@@ -108,30 +122,17 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void setSpinner(List<Parkinglot> parkinglotList) {
-        typeSp = findViewById(R.id.type_sp);
         divSp = findViewById(R.id.div_sp);
-        typeSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                type = typeSp.getSelectedItem().toString();
-                if (type.equals("주차장")) {
-                    divSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            div = divSp.getSelectedItem().toString();
-                            initializedParkinglotRecycler(parkinglotList);
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {}
-                    });
-
-
-                }
+                div = divSp.getSelectedItem().toString();
+                initializedParkinglotRecycler(parkinglotList);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
     }
 

@@ -23,21 +23,18 @@
             android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/nav_menu" />
 
-        <TextView
+        <ImageView
             android:id="@+id/tv_logo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:text="Busan, Korea" />
+            app:srcCompat="@drawable/nav_icon" />
 
     </RelativeLayout>
 
