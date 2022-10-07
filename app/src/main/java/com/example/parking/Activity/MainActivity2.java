@@ -1,12 +1,19 @@
 package com.example.parking.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,13 +45,13 @@ public class MainActivity2 extends AppCompatActivity {
     private Spinner divSp;
     private TextView listInfo;
     private String div;
-    private Button button;
 
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ParkinglotRecyclerAdapter parkingAdapter;
     private RecyclerView.Adapter adapter;
 
+    public Button refreshBtn;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -66,7 +73,66 @@ public class MainActivity2 extends AppCompatActivity {
         setSpinner(parkinglotList);
 
         initializedParkingRecyclerDefault(parkinglotList);
+
+        // 위치 관리자 객체 참조하기
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        refreshBtn = (Button)findViewById(R.id.refresh_btn);
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( Build.VERSION.SDK_INT >= 23 &&
+                        ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                    ActivityCompat.requestPermissions( MainActivity2.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+                            0 );
+                }
+                else{
+                    Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    String provider = location.getProvider();
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
+                    double altitude = location.getAltitude();
+
+                    listInfo.setText(
+                            "위도 : " + longitude + "\n" +
+                            "경도 : " + latitude + "\n" );
+
+                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                            1000,
+                            1,
+                            gpsLocationListener);
+                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                            1000,
+                            1,
+                            gpsLocationListener);
+                }
+            }
+        });
+
     }
+    final LocationListener gpsLocationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+
+            String provider = location.getProvider();
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            double altitude = location.getAltitude();
+
+            listInfo.setText(
+                    "위도 : " + longitude + "\n" +
+                    "경도 : " + latitude + "\n"
+                    );
+
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
 
     private void initNavigationView() {
         nav = findViewById(R.id.nav);
@@ -108,9 +174,9 @@ public class MainActivity2 extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void btnClick(View v) {
+    public void btnSearchClick(View v) {
         switch (v.getId()) {
-            case R.id.button:
+            case R.id.search_btn:
                 listInfo = (TextView) findViewById(R.id.listInfo);
                 listInfo.setText("부산광역시 " + div + " 주차장 검색 결과입니다");
 
@@ -150,4 +216,5 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 }
+
 

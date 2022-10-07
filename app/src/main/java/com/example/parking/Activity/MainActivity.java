@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         setTMapAuth();
         initialize();
+
+        // 위치 관리자 객체 참조하기
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
     }
 
