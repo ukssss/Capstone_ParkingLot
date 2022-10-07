@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     private DrawerLayout drawerLayout;
     private NavigationView nav;
     private FloatingActionButton initTmap;
+    private FloatingActionButton stopDirection;
 
     // T Map
     private TMapView tMapView = null;
@@ -59,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
         init();
         onClickDrawer();
-        onClickFab();
+        onClickFabGps();
+        onClickFabStop();
         NavigationViewHelper.enableNavigation(mContext, nav);
 
         setTMapAuth();
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         }));
     }
 
-    private void onClickFab() {
+    private void onClickFabGps() {
         initTmap = findViewById(R.id.fabGPS);
         initTmap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,9 +139,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
         public void onCalloutRightButton(TMapMarkerItem tMapMarkerItem) {
-            Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.info_start);
-            Bitmap arrive = BitmapFactory.decodeResource(getResources(), R.drawable.info_arrive);
-
             TMapPoint tMapPoint = tMapMarkerItem.getTMapPoint();
             TMapPoint tMapPointStart = new TMapPoint(nowLatitude, nowLongitude);
             FindCarPathTask findCarPathTask = new FindCarPathTask(getApplicationContext(), tMapView);
@@ -153,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             else if (nRightButtonCount == 1) {
                 findCarPathTask.execute(tMapPointStart, tMapPoint);
 
-                tMapMarkerItem.setCalloutRightButtonImage(arrive);
                 tMapView.setCenterPoint(nowLongitude, nowLatitude);
                 tMapView.setZoomLevel(17);
                 nRightButtonCount++;
@@ -174,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
 
             else if (nRightButtonCount == 2) {
                 tMapView.removeTMapPolyLine("Line");
-                tMapMarkerItem.setCalloutRightButtonImage(start);
 
                 tMapView.setZoomLevel(15);
                 Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
@@ -183,6 +180,26 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             }
         }
     };
+
+    private void onClickFabStop() {
+        stopDirection = findViewById(R.id.fabStop);
+        stopDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nRightButtonCount == 2) {
+                    tMapView.removeTMapPolyLine("Line");
+                    tMapView.setZoomLevel(15);
+
+                    Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
+                    nRightButtonCount = 0;
+                }
+                else {
+                    Toast.makeText(mContext, "목적지가 없습니다", Toast.LENGTH_SHORT).show();
+                    nRightButtonCount = 0;
+                }
+            }
+        });
+    }
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
         ParkinglotDatabaseHelper parkinglotDatabaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
