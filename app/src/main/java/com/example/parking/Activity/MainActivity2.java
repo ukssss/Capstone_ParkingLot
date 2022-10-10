@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -86,6 +87,8 @@ public class MainActivity2 extends AppCompatActivity {
 
         setLocation(parkinglotList);
         setSpinner(parkinglotList);
+
+        favoriteCheck(parkinglotList);
 
     }
 
@@ -215,7 +218,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
+    public void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
@@ -227,6 +230,20 @@ public class MainActivity2 extends AppCompatActivity {
 
         divAdapter = parkingAdapter;
 
+    }
+
+    public void favoriteCheck(List<Parkinglot> parkinglotList) {
+        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox) ;
+        checkBox.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox)v).isChecked()) {
+                    // TODO : CheckBox is checked.
+                } else {
+                    // TODO : CheckBox is unchecked.
+                }
+            }
+        }) ;
     }
 
 
