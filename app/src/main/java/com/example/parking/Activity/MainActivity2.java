@@ -30,6 +30,8 @@ import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
 import com.example.parking.Layout.ParkinglotRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.skt.Tmap.TMapGpsManager;
+import com.skt.Tmap.TMapView;
 
 import java.util.List;
 
@@ -53,14 +55,12 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView.Adapter nearbyAdapter;
     private RecyclerView.Adapter divAdapter;
 
-    public Button refreshBtn;
+    private Button refreshBtn;
+
     public double lat1;
     public double lon1;
     public double lat2;
     public double lon2;
-
-    public double nowMeter;
-    public double beforeMeter = 30000;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -80,9 +80,12 @@ public class MainActivity2 extends AppCompatActivity {
 
         // Load Database (Parkinglot)
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
-        setSpinner(parkinglotList);
 
-        initializedParkingRecyclerDefault(parkinglotList);
+        listInfo = (TextView) findViewById(R.id.listInfo);
+        initializedParkinglotRecyclerDefault(parkinglotList);
+
+        setLocation(parkinglotList);
+        setSpinner(parkinglotList);
 
     }
 
@@ -107,76 +110,6 @@ public class MainActivity2 extends AppCompatActivity {
 
         return parkinglotList;
     }
-
-    public void initializedParkingRecyclerDefault(List<Parkinglot> parkinglotList) {
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( MainActivity2.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
-                    0 );
-        }
-        else {
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            lon1 = location.getLongitude();
-            lat1 = location.getLatitude();
-
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000,
-                    1,
-                    gpsLocationListener);
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    1000,
-                    1,
-                    gpsLocationListener);
-        }
-
-        linearLayoutManager = new LinearLayoutManager(this);
-        parkingAdapter = new ParkinglotRecyclerAdapter();
-
-        for (int i = 0; i < parkinglotList.size(); i++) {
-            lon2 = parkinglotList.get(i).longitude;
-            lat2 = parkinglotList.get(i).latitude;
-            double nowMeter = distance(lat1, lon1, lat2, lon2, "meter");
-            if (nowMeter < 2000) {
-                parkingAdapter.addItems(parkinglotList.get(i));
-            }
-        }
-
-        nearbyAdapter = parkingAdapter;
-
-        listInfo = (TextView) findViewById(R.id.listInfo);
-        listInfo.setText("부산광역시 " + div + " 주차장 검색 결과입니다");
-
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(nearbyAdapter);
-
-    }
-
-    final LocationListener gpsLocationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-
-            lon1 = location.getLongitude();
-            lat1 = location.getLatitude();
-
-            listInfo = (TextView) findViewById(R.id.listInfo);
-            listInfo.setText("위도 : " + lon1 + "\n" + "경도 : " + lat1);
-
-            recyclerView = findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(linearLayoutManager);
-            recyclerView.setAdapter(nearbyAdapter);
-
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-    };
 
     // 거리 계산 함수
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
@@ -208,24 +141,63 @@ public class MainActivity2 extends AppCompatActivity {
         return (rad * 180 / Math.PI);
     }
 
-    public void btnRefreshClick(View v) {
-        switch  (v.getId()) {
-            case R.id.refresh_btn:
+    public void setLocation(List<Parkinglot> parkinglotList) {
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( MainActivity2.this, new String[] {
+                    android.Manifest.permission.ACCESS_FINE_LOCATION}, 0 );
         }
+        else{
+            // 가장최근 위치정보 가져오기
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(location != null) {
+                lon1 = location.getLongitude();
+                lat1 = location.getLatitude();
+
+                listInfo.setText(
+                        "위도 : " + lon1 + "\n" + "경도 : " + lat1 + "\n"
+                );
+
+            }
+        }
+        initializedParkinglotRecyclerDefault(parkinglotList);
+    }
+
+
+
+    public void initializedParkinglotRecyclerDefault(List<Parkinglot> parkinglotList) {
+        linearLayoutManager = new LinearLayoutManager(this);
+        parkingAdapter = new ParkinglotRecyclerAdapter();
+
+        for (int i = 0; i < parkinglotList.size(); i++) {
+            lon2 = parkinglotList.get(i).longitude;
+            lat2 = parkinglotList.get(i).latitude;
+            double nowMeter = distance(lat1, lon1, lat2, lon2, "meter");
+            if (nowMeter < 2000) {
+                parkingAdapter.addItems(parkinglotList.get(i));
+            }
+        }
+
+        nearbyAdapter = parkingAdapter;
+
+        listInfo.setText("2Km 이내의 주차장 검색 목록입니다");
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(nearbyAdapter);
     }
 
     public void btnSearchClick(View v) {
         switch (v.getId()) {
             case R.id.search_btn:
-                listInfo = (TextView) findViewById(R.id.listInfo);
                 listInfo.setText("부산광역시 " + div + " 주차장 검색 결과입니다");
 
                 recyclerView = findViewById(R.id.recyclerView);
                 recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.setAdapter(divAdapter);
         }
-
     }
 
     public void setSpinner(List<Parkinglot> parkinglotList) {
@@ -256,6 +228,8 @@ public class MainActivity2 extends AppCompatActivity {
         divAdapter = parkingAdapter;
 
     }
+
+
 }
 
 

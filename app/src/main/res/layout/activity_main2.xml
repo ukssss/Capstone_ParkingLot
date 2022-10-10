@@ -40,7 +40,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:orientation="horizontal">
 
             <TextView
@@ -49,15 +49,6 @@
                 android:layout_height="match_parent"
                 android:paddingTop="10dp"
                 android:paddingLeft="10dp" />
-
-            <Button
-                android:id="@+id/refresh_btn"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:onClick="btnRefreshClick"
-                android:text="새로고침"
-                android:textSize="12sp" />
-
 
         </LinearLayout>
 
