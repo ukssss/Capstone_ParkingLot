@@ -31,8 +31,6 @@ import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
 import com.example.parking.Layout.ParkinglotRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
-import com.skt.Tmap.TMapGpsManager;
-import com.skt.Tmap.TMapView;
 
 import java.util.List;
 
@@ -56,7 +54,6 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView.Adapter nearbyAdapter;
     private RecyclerView.Adapter divAdapter;
 
-    private Button refreshBtn;
 
     public double lat1;
     public double lon1;
@@ -88,7 +85,6 @@ public class MainActivity2 extends AppCompatActivity {
         setLocation(parkinglotList);
         setSpinner(parkinglotList);
 
-        favoriteCheck(parkinglotList);
 
     }
 
@@ -133,7 +129,6 @@ public class MainActivity2 extends AppCompatActivity {
         return (dist);
     }
 
-
     // This function converts decimal degrees to radians
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
@@ -168,9 +163,7 @@ public class MainActivity2 extends AppCompatActivity {
         initializedParkinglotRecyclerDefault(parkinglotList);
     }
 
-
-
-    public void initializedParkinglotRecyclerDefault(List<Parkinglot> parkinglotList) {
+    private void initializedParkinglotRecyclerDefault(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
@@ -218,7 +211,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    public void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
+    private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
@@ -231,21 +224,6 @@ public class MainActivity2 extends AppCompatActivity {
         divAdapter = parkingAdapter;
 
     }
-
-    public void favoriteCheck(List<Parkinglot> parkinglotList) {
-        CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox) ;
-        checkBox.setOnClickListener(new CheckBox.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox)v).isChecked()) {
-                    // TODO : CheckBox is checked.
-                } else {
-                    // TODO : CheckBox is unchecked.
-                }
-            }
-        }) ;
-    }
-
 
 }
 

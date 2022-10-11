@@ -130,6 +130,8 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     arr_random_num = random.nextInt(50) + 1;
                     parkinglot.setParkStat(arr_random_num);
 
+                    parkinglot.setFavorite(mCursor.getString(11));
+
                     mList.add(parkinglot);
                 }
             }
