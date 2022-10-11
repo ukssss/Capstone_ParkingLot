@@ -51,8 +51,11 @@ public class MainActivity2 extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private ParkinglotRecyclerAdapter parkingAdapter;
     private RecyclerView.Adapter adapter;
-    private RecyclerView.Adapter nearbyAdapter;
     private RecyclerView.Adapter divAdapter;
+    private RecyclerView.Adapter favoriteAdapter;
+
+    private CheckBox checkBox;
+    private Integer favorite;
 
 
     public double lat1;
@@ -80,10 +83,12 @@ public class MainActivity2 extends AppCompatActivity {
         List<Parkinglot> parkinglotList = initLoadParkinglotDatabase();
 
         listInfo = (TextView) findViewById(R.id.listInfo);
-        initializedParkinglotRecyclerDefault(parkinglotList);
+
+        initializedParkinglotRecycler(parkinglotList);
 
         setLocation(parkinglotList);
         setSpinner(parkinglotList);
+        setFavorite(parkinglotList);
 
 
     }
@@ -122,7 +127,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         if (unit == "kilometer") {
             dist = dist * 1.609344;
-        } else if(unit == "meter"){
+        } else if (unit == "meter") {
             dist = dist * 1609.344;
         }
 
@@ -142,15 +147,14 @@ public class MainActivity2 extends AppCompatActivity {
     public void setLocation(List<Parkinglot> parkinglotList) {
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( MainActivity2.this, new String[] {
-                    android.Manifest.permission.ACCESS_FINE_LOCATION}, 0 );
-        }
-        else{
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity2.this, new String[]{
+                    android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        } else {
             // 가장최근 위치정보 가져오기
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if(location != null) {
+            if (location != null) {
                 lon1 = location.getLongitude();
                 lat1 = location.getLatitude();
 
@@ -160,10 +164,10 @@ public class MainActivity2 extends AppCompatActivity {
 
             }
         }
-        initializedParkinglotRecyclerDefault(parkinglotList);
+        initializedParkinglotRecycler(parkinglotList);
     }
 
-    private void initializedParkinglotRecyclerDefault(List<Parkinglot> parkinglotList) {
+    private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
@@ -176,13 +180,13 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
 
-        nearbyAdapter = parkingAdapter;
+        adapter = parkingAdapter;
 
-        listInfo.setText("2Km 이내의 주차장 검색 목록입니다");
+        listInfo.setText("현 위치 2Km 이내의 주차장 검색 목록입니다");
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(nearbyAdapter);
+        recyclerView.setAdapter(adapter);
     }
 
     public void btnSearchClick(View v) {
@@ -202,7 +206,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 div = divSp.getSelectedItem().toString();
-                initializedParkinglotRecycler(parkinglotList);
+                initializedParkinglotRecyclerDiv(parkinglotList);
             }
 
             @Override
@@ -211,7 +215,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
-    private void initializedParkinglotRecycler(List<Parkinglot> parkinglotList) {
+    private void initializedParkinglotRecyclerDiv(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
@@ -222,9 +226,48 @@ public class MainActivity2 extends AppCompatActivity {
         }
 
         divAdapter = parkingAdapter;
+    }
 
+    public void btnInfoClick(View v) {
+        switch (v.getId()) {
+            case R.id.favorite_btn:
+                listInfo.setText("주차장 즐겨찾기 목록 결과입니다");
+
+                recyclerView = findViewById(R.id.recyclerView);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(favoriteAdapter);
+        }
+    }
+
+    public void setFavorite(List<Parkinglot> parkinglotList) {
+        initializedParkinglotRecyclerFavorite(parkinglotList);
+    }
+
+    private void initializedParkinglotRecyclerFavorite(List<Parkinglot> parkinglotList) {
+        linearLayoutManager = new LinearLayoutManager(this);
+        parkingAdapter = new ParkinglotRecyclerAdapter();
+
+        for (int i = 0; i < parkinglotList.size(); i++) {
+            if (parkinglotList.get(i).favorite.equals(1)) {
+                parkingAdapter.addItems(parkinglotList.get(i));
+            }
+        }
+
+        favoriteAdapter = parkingAdapter;
+    }
+
+    private void sendFavorite(List<Parkinglot> parkinglotList) {
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i = 0; i < parkinglotList.size(); i++) {
+                    parkingAdapter.addItems(parkinglotList.get(i));
+                }
+            }
+        });
     }
 
 }
+
 
 

@@ -3,6 +3,8 @@ package com.example.parking.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,6 +47,7 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
         private TextView name;
         private TextView addr;
         private TextView parkStat;
+        private Button favorite;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -55,9 +58,11 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             addr = itemView.findViewById(R.id.addr);
             div = itemView.findViewById(R.id.div);
             parkStat = itemView.findViewById(R.id.parkStat);
+            favorite = itemView.findViewById(R.id.favBtn);
+
         }
 
-        public void onBind(Parkinglot parkinglot, int position) {
+        public void onBind(Parkinglot parkinglot, int position, Button favorite) {
             String s = "" + (position + 1);
             id.setText(s);
             div.setText(parkinglot.getDiv());
@@ -67,5 +72,6 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             parkStat.setText("주차가능대수 : " + parkinglot.getParkStat());
 
         }
+
     }
 }

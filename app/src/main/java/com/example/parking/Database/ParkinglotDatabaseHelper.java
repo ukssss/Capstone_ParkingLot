@@ -130,7 +130,7 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     arr_random_num = random.nextInt(50) + 1;
                     parkinglot.setParkStat(arr_random_num);
 
-                    parkinglot.setFavorite(mCursor.getString(11));
+                    parkinglot.setFavorite(mCursor.getInt(11));
 
                     mList.add(parkinglot);
                 }
@@ -151,5 +151,18 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
+
+    public void updateFavorite(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "UPDATE " + tableName + " SET favorite = '1' WHERE id = " + id +";";
+        db.execSQL(sql);
+        Log.d("Update favorite", id.toString());
+    }
+
+    public Cursor selectAllFavoriteList() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "SELECT * FROM " + tableName + " WHERE favorite = '1';";
+        return db.rawQuery(sql, null, null);
+    }
 }
 
