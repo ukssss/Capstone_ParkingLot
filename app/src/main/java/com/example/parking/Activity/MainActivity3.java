@@ -102,7 +102,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void initializedParkinglotRecyclerDefault(List<Parkinglot> parkinglotList) {
-        listInfo.setText("즐겨찾기 주차장 목록");
+        listInfo.setText("예약 주차장 목록");
 
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();

@@ -47,7 +47,7 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
         private TextView name;
         private TextView addr;
         private TextView parkStat;
-        private Button favorite;
+        private CheckBox favorite;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -62,7 +62,7 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
 
         }
 
-        public void onBind(Parkinglot parkinglot, int position, Button favorite) {
+        public void onBind(Parkinglot parkinglot, int position) {
             String s = "" + (position + 1);
             id.setText(s);
             div.setText(parkinglot.getDiv());
@@ -70,6 +70,13 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             name.setText(parkinglot.getName());
             addr.setText("주소 : " + parkinglot.getAddr());
             parkStat.setText("주차가능대수 : " + parkinglot.getParkStat());
+
+            if (parkinglot.getFavorite() == 1) {
+                favorite.setChecked(true);
+            }
+            else {
+                favorite.setChecked(false);
+            }
 
         }
 

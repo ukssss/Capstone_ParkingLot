@@ -260,9 +260,7 @@ public class MainActivity2 extends AppCompatActivity {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < parkinglotList.size(); i++) {
-                    parkingAdapter.addItems(parkinglotList.get(i));
-                }
+//                if (parkinglotList.getFavorite)
             }
         });
     }
