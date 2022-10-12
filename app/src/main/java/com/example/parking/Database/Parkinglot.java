@@ -1,7 +1,5 @@
 package com.example.parking.Database;
 
-import android.widget.CheckBox;
-
 public class Parkinglot {
 
     public int id;
@@ -15,7 +13,7 @@ public class Parkinglot {
     public double latitude;                 // 위도
     public double longitude;                // 경도
     public Integer parkStat;
-    public Integer favorite;
+    public Integer favStat;
 
     // SET
     public void setId(int id) { this.id = id; }
@@ -29,8 +27,7 @@ public class Parkinglot {
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public void setParkStat(Integer parkStat) { this.parkStat = parkStat; }
-    public void setFavorite(Integer favorite) { this.favorite = favorite; }
-
+    public void setFavStat(Integer favStat) { this.favStat = favStat; }
 
     // GET
     public int getId() { return this.id; }
@@ -44,7 +41,7 @@ public class Parkinglot {
     public double getLatitude() { return this.latitude; }
     public double getLongitude() { return this.longitude; }
     public Integer getParkStat() { return this.parkStat; }
-    public Integer getFavorite() { return this.favorite; }
+    public Integer getFavStat() { return this.favStat; }
 
 
 }

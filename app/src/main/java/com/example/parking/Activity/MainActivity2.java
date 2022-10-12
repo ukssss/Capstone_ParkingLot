@@ -248,21 +248,12 @@ public class MainActivity2 extends AppCompatActivity {
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
         for (int i = 0; i < parkinglotList.size(); i++) {
-            if (parkinglotList.get(i).favorite.equals(1)) {
+            if (parkinglotList.get(i).favStat.equals(1)) {
                 parkingAdapter.addItems(parkinglotList.get(i));
             }
         }
 
         favoriteAdapter = parkingAdapter;
-    }
-
-    private void sendFavorite(List<Parkinglot> parkinglotList) {
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                if (parkinglotList.getFavorite)
-            }
-        });
     }
 
 }

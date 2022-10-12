@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRecyclerAdapter.MyViewHolder> {
@@ -47,7 +49,7 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
         private TextView name;
         private TextView addr;
         private TextView parkStat;
-        private CheckBox favorite;
+        private CheckBox favCheck;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -58,7 +60,7 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             addr = itemView.findViewById(R.id.addr);
             div = itemView.findViewById(R.id.div);
             parkStat = itemView.findViewById(R.id.parkStat);
-            favorite = itemView.findViewById(R.id.favBtn);
+            favCheck = itemView.findViewById(R.id.fav_check);
 
         }
 
@@ -71,12 +73,23 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             addr.setText("주소 : " + parkinglot.getAddr());
             parkStat.setText("주차가능대수 : " + parkinglot.getParkStat());
 
-            if (parkinglot.getFavorite() == 1) {
-                favorite.setChecked(true);
+            if (parkinglot.getFavStat() == 1) {
+                favCheck.setChecked(true);
             }
             else {
-                favorite.setChecked(false);
+                favCheck.setChecked(false);
             }
+
+            favCheck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (parkinglot.getFavStat() == 1) {
+                        parkinglot.setFavStat(0);
+                    }
+                    else
+                        parkinglot.setFavStat(1);
+                }
+            });
 
         }
 

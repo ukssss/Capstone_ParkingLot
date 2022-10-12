@@ -84,7 +84,7 @@
         android:paddingRight="35dp">
 
         <CheckBox
-            android:id="@+id/favBtn"
+            android:id="@+id/fav_check"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:gravity="center"

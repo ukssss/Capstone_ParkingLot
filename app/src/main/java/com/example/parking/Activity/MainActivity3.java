@@ -108,7 +108,7 @@ public class MainActivity3 extends AppCompatActivity {
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
         for (int i = 0; i < parkinglotList.size(); i++) {
-            if (parkinglotList.get(i).favorite.equals("TRUE")) {
+            if (parkinglotList.get(i).favStat.equals("1")) {
                 parkingAdapter.addItems(parkinglotList.get(i));
             }
         }

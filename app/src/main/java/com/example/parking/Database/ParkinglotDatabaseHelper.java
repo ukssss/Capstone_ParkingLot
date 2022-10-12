@@ -1,5 +1,6 @@
 package com.example.parking.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -7,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
+import android.widget.CheckBox;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,6 +30,7 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
+    private CheckBox favCheck;
 
     public ParkinglotDatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
@@ -130,7 +133,7 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
                     arr_random_num = random.nextInt(50) + 1;
                     parkinglot.setParkStat(arr_random_num);
 
-                    parkinglot.setFavorite(mCursor.getInt(11));
+                    parkinglot.setFavStat(mCursor.getInt(11));
 
                     mList.add(parkinglot);
                 }
@@ -149,6 +152,9 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {}
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    }
+
+
 }
 
