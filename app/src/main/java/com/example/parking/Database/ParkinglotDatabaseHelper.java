@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 import android.widget.CheckBox;
+import android.widget.Toast;
+
+import com.example.parking.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +33,7 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
     private final Context mContext;
     private SQLiteDatabase mDatabase;
-    private CheckBox favCheck;
+    public int row;
 
     public ParkinglotDatabaseHelper(Context context) {
         super(context, databaseName, null, 1);
@@ -132,7 +135,6 @@ public class ParkinglotDatabaseHelper extends SQLiteOpenHelper{
 
                     arr_random_num = random.nextInt(50) + 1;
                     parkinglot.setParkStat(arr_random_num);
-
                     parkinglot.setFavStat(mCursor.getInt(11));
 
                     mList.add(parkinglot);

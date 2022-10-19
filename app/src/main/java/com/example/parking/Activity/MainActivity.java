@@ -12,9 +12,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.parking.Database.ParkinglotDatabaseHelper;
@@ -213,9 +215,13 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
         return parkinglotList;
     }
 
+
     private void addParkinglotMarker(List<Parkinglot> parkinglotList) {
 
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_parkinglot);
+        Bitmap free = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_free);
+        Bitmap littleLeft = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_littleleft);
+        Bitmap full = BitmapFactory.decodeResource(getResources(), R.drawable.markerline_full);
+
         Bitmap start = BitmapFactory.decodeResource(getResources(), R.drawable.info_start);
 
         for (int i = 0; i < parkinglotList.size(); i++) {
@@ -228,7 +234,17 @@ public class MainActivity extends AppCompatActivity implements TMapGpsManager.on
             TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
 
             TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
-            tMapMarkerItem.setIcon(bitmap1);
+
+            if (parkinglotList.get(i).parkStat <= 5) {
+                tMapMarkerItem.setIcon(full);
+            }
+            else if (parkinglotList.get(i).parkStat > 5 && parkinglotList.get(i).parkStat < 20) {
+                tMapMarkerItem.setIcon(littleLeft);
+            }
+            else {
+                tMapMarkerItem.setIcon(free);
+            }
+
             tMapMarkerItem.setPosition(0.5f, 1.0f);
             tMapMarkerItem.setCalloutRightButtonImage(start);
             tMapMarkerItem.setTMapPoint(tMapPoint);

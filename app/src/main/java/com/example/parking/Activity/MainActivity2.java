@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.parking.Database.ParkinglotDatabaseHelper;
 import com.example.parking.Layout.NavigationViewHelper;
@@ -32,6 +33,7 @@ import com.example.parking.R;
 import com.example.parking.Layout.ParkinglotRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity2 extends AppCompatActivity {
@@ -54,14 +56,14 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView.Adapter divAdapter;
     private RecyclerView.Adapter favoriteAdapter;
 
-    private CheckBox checkBox;
-    private Integer favorite;
-
-
     public double lat1;
     public double lon1;
     public double lat2;
     public double lon2;
+
+    public boolean isCheck[] = new boolean[50];
+    private ArrayList<Parkinglot> favoriteData = new ArrayList<>();
+    public CheckBox favCheck;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -119,7 +121,8 @@ public class MainActivity2 extends AppCompatActivity {
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
 
         double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
 
         dist = Math.acos(dist);
         dist = rad2deg(dist);
@@ -148,7 +151,8 @@ public class MainActivity2 extends AppCompatActivity {
         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity2.this, new String[]{
                     android.Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         } else {
@@ -243,19 +247,25 @@ public class MainActivity2 extends AppCompatActivity {
         initializedParkinglotRecyclerFavorite(parkinglotList);
     }
 
+
+
     private void initializedParkinglotRecyclerFavorite(List<Parkinglot> parkinglotList) {
         linearLayoutManager = new LinearLayoutManager(this);
         parkingAdapter = new ParkinglotRecyclerAdapter();
 
+
         for (int i = 0; i < parkinglotList.size(); i++) {
             if (parkinglotList.get(i).favStat.equals(1)) {
-                parkingAdapter.addItems(parkinglotList.get(i));
+                favoriteData.add(parkinglotList.get(i));
             }
+        }
+
+        for (int j = 0; j < favoriteData.size(); j++) {
+            parkingAdapter.addItems(favoriteData.get(j));
         }
 
         favoriteAdapter = parkingAdapter;
     }
-
 }
 
 

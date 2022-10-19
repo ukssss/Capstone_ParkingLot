@@ -1,19 +1,20 @@
 package com.example.parking.Layout;
 
+import static java.lang.Integer.parseInt;
+
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,6 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
         private TextView parkStat;
         private CheckBox favCheck;
 
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -71,13 +71,16 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
 
             name.setText(parkinglot.getName());
             addr.setText("주소 : " + parkinglot.getAddr());
-            parkStat.setText("주차가능대수 : " + parkinglot.getParkStat());
 
-            if (parkinglot.getFavStat() == 1) {
-                favCheck.setChecked(true);
+            parkStat.setText("주차가능대수 : " + parkinglot.getParkStat());
+            if (parkinglot.getParkStat() <= 5) {
+                parkStat.setTextColor(Color.RED);
+            }
+            else if (parkinglot.getParkStat() > 5 && parkinglot.getParkStat() < 20) {
+                parkStat.setTextColor(Color.MAGENTA);
             }
             else {
-                favCheck.setChecked(false);
+                parkStat.setTextColor(Color.GREEN);
             }
 
             favCheck.setOnClickListener(new View.OnClickListener() {
@@ -85,11 +88,19 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
                 public void onClick(View view) {
                     if (parkinglot.getFavStat() == 1) {
                         parkinglot.setFavStat(0);
+
                     }
                     else
                         parkinglot.setFavStat(1);
                 }
             });
+
+            if (parkinglot.getFavStat() == 1) {
+                favCheck.setChecked(true);
+            }
+            else {
+                favCheck.setChecked(false);
+            }
 
         }
 
