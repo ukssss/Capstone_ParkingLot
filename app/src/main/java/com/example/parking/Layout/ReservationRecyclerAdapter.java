@@ -18,14 +18,14 @@ import com.example.parking.R;
 
 import java.util.ArrayList;
 
-public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRecyclerAdapter.MyViewHolder> {
+public class ReservationRecyclerAdapter extends RecyclerView.Adapter<ReservationRecyclerAdapter.MyViewHolder> {
 
     private ArrayList<Parkinglot> parkinglotData = new ArrayList<>();
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.parkinglot_listview, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reservation_listview, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -45,29 +45,24 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView id;
-        private TextView div;
         private TextView name;
         private TextView addr;
         private TextView parkStat;
-        private CheckBox favCheck;
+        private TextView phoneNumber;
+        private TextView type;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            id = itemView.findViewById(R.id.id);
             name = itemView.findViewById(R.id.name);
             addr = itemView.findViewById(R.id.addr);
-            div = itemView.findViewById(R.id.div);
             parkStat = itemView.findViewById(R.id.parkStat);
-            favCheck = itemView.findViewById(R.id.fav_check);
+            phoneNumber = itemView.findViewById(R.id.phoneNumber);
+            type = itemView.findViewById(R.id.type);
 
         }
 
         public void onBind(Parkinglot parkinglot, int position) {
-            String s = "" + (position + 1);
-            id.setText(s);
-            div.setText(parkinglot.getDiv());
 
             name.setText(parkinglot.getName());
             addr.setText("주소 : " + parkinglot.getAddr());
@@ -82,24 +77,8 @@ public class ParkinglotRecyclerAdapter extends RecyclerView.Adapter<ParkinglotRe
             else {
                 parkStat.setTextColor(Color.GREEN);
             }
-
-            favCheck.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (parkinglot.getFavStat() == 1) {
-                        parkinglot.setFavStat(0);
-                    }
-                    else
-                        parkinglot.setFavStat(1);
-                }
-            });
-
-            if (parkinglot.getFavStat() == 1) {
-                favCheck.setChecked(true);
-            }
-            else {
-                favCheck.setChecked(false);
-            }
+            phoneNumber.setText("전화번호 : " + parkinglot.getPhoneNumber());
+            type.setText("주차장유형 : " + parkinglot.getType());
 
         }
 

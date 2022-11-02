@@ -15,31 +15,52 @@
         android:orientation="vertical">
         <include layout="@layout/toolbar_main"/>
 
+        <FrameLayout
+            android:id="@+id/frameLayoutTmap"
+            android:layout_width="match_parent"
+            android:layout_height="217dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="20dp"
+                android:src="@drawable/fab_stop"
+                android:text="STOP"
+                app:backgroundTint="@color/white"
+                app:tint="@android:color/holo_red_dark" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabGPS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="20dp"
+                android:src="@drawable/fab_gps"
+                app:backgroundTint="@color/white"
+                app:tint="@color/teal_700" />
+
+        </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/listInfo"
-                android:layout_width="300dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp" />
+                android:paddingBottom="10dp"
+                android:text="조회하시려면 'Search' 를 눌러주세요"
+                tools:ignore="MissingConstraints"
+                tools:listitem="@layout/reservation_listview">
 
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:text="조회하시려면 'Search' 를 눌러주세요"
-            tools:ignore="MissingConstraints"
-            tools:listitem="@layout/parkinglot_listview">
-
-        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 
