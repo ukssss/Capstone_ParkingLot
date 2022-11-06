@@ -14,6 +14,7 @@ public class Parkinglot {
     public double longitude;                // 경도
     public Integer parkStat;
     public Integer favStat;
+    public Integer resStat;
 
     // SET
     public void setId(int id) { this.id = id; }
@@ -28,6 +29,7 @@ public class Parkinglot {
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public void setParkStat(Integer parkStat) { this.parkStat = parkStat; }
     public void setFavStat(Integer favStat) { this.favStat = favStat; }
+    public void setResStat(Integer resStat) { this.resStat = resStat; }
 
     // GET
     public int getId() { return this.id; }
@@ -42,7 +44,7 @@ public class Parkinglot {
     public double getLongitude() { return this.longitude; }
     public Integer getParkStat() { return this.parkStat; }
     public Integer getFavStat() { return this.favStat; }
-
+    public Integer getResStat() { return this.resStat; }
 
 }
 

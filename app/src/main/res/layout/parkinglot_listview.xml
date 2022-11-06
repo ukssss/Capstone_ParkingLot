@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
 
@@ -35,6 +35,15 @@
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:id="@+id/res"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="예약"
+            android:textSize="10sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

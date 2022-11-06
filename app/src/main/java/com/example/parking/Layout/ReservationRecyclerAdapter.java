@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.parking.Database.Parkinglot;
 import com.example.parking.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class ReservationRecyclerAdapter extends RecyclerView.Adapter<ReservationRecyclerAdapter.MyViewHolder> {
@@ -49,6 +51,9 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<Reservation
         private TextView addr;
         private TextView parkStat;
         private TextView phoneNumber;
+        private TextView operDay;
+        private TextView parkingchargeInfo;
+        private TextView div;
         private TextView type;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -58,6 +63,9 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<Reservation
             addr = itemView.findViewById(R.id.addr);
             parkStat = itemView.findViewById(R.id.parkStat);
             phoneNumber = itemView.findViewById(R.id.phoneNumber);
+            operDay = itemView.findViewById(R.id.operDay);
+            parkingchargeInfo = itemView.findViewById(R.id.pay);
+            div = itemView.findViewById(R.id.div);
             type = itemView.findViewById(R.id.type);
 
         }
@@ -79,6 +87,10 @@ public class ReservationRecyclerAdapter extends RecyclerView.Adapter<Reservation
             }
             phoneNumber.setText("전화번호 : " + parkinglot.getPhoneNumber());
             type.setText("주차장유형 : " + parkinglot.getType());
+            operDay.setText("운영요일 : " + parkinglot.getOperDay());
+            parkingchargeInfo.setText("결제 : " + parkinglot.getParkingchargeInfo());
+            div.setText("행정구역 : " + parkinglot.getDiv());
+
 
         }
 

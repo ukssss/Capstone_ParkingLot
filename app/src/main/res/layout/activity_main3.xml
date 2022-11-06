@@ -18,7 +18,7 @@
         <FrameLayout
             android:id="@+id/frameLayoutTmap"
             android:layout_width="match_parent"
-            android:layout_height="217dp">
+            android:layout_height="345dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabStop"
@@ -48,11 +48,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/listInfo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingTop="15dp"
+                android:paddingLeft="10dp"
+                android:text="예약하신 주차장 정보입니다"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:text="조회하시려면 'Search' 를 눌러주세요"
                 tools:ignore="MissingConstraints"

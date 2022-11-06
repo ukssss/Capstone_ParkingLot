@@ -78,6 +78,8 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
 
     public double nowLatitude;
     public double nowLongitude;
+    public double resLatitude;
+    public double resLongitude;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -124,6 +126,27 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
         });
     }
 
+    private void onClickFabStop() {
+        stopDirection = findViewById(R.id.fabStop);
+        stopDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (nRightButtonCount == 2) {
+                    tMapView.removeTMapPolyLine("Line");
+                    tMapView.setCenterPoint(resLongitude, resLatitude);
+                    tMapView.setZoomLevel(15);
+
+                    Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
+                    nRightButtonCount = 0;
+                }
+                else {
+                    Toast.makeText(mContext, "목적지가 없습니다", Toast.LENGTH_SHORT).show();
+                    nRightButtonCount = 0;
+                }
+            }
+        });
+    }
+
     private void init() {
         nav = findViewById(R.id.nav);
     }
@@ -139,7 +162,6 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
         frameLayoutTMap.addView(tMapView);
 
         // TMapView Setting
-        tMapView.setCenterPoint(129.0600331, 35.1578157);
         tMapView.setZoomLevel(15);
         tMapView.setIconVisibility(true);
         tMapView.setOnCalloutRightButtonClickListener(mOnCalloutRightButtonClickCallback);
@@ -167,10 +189,11 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
     @Override
     public void onLocationChange(Location location) {
         tMapView.setLocationPoint(location.getLongitude(), location.getLatitude());
-        tMapView.setCenterPoint(location.getLongitude(), location.getLatitude());
         nowLongitude = location.getLongitude();
         nowLatitude = location.getLatitude();
     }
+
+
 
     TMapView.OnCalloutRightButtonClickCallback mOnCalloutRightButtonClickCallback = new TMapView.OnCalloutRightButtonClickCallback() {
         @Override
@@ -217,25 +240,6 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
         }
     };
 
-    private void onClickFabStop() {
-        stopDirection = findViewById(R.id.fabStop);
-        stopDirection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (nRightButtonCount == 2) {
-                    tMapView.removeTMapPolyLine("Line");
-                    tMapView.setZoomLevel(15);
-
-                    Toast.makeText(mContext,"안내를 종료합니다", Toast.LENGTH_SHORT).show();
-                    nRightButtonCount = 0;
-                }
-                else {
-                    Toast.makeText(mContext, "목적지가 없습니다", Toast.LENGTH_SHORT).show();
-                    nRightButtonCount = 0;
-                }
-            }
-        });
-    }
 
     private List<Parkinglot> initLoadParkinglotDatabase() {
         ParkinglotDatabaseHelper parkinglotDatabaseHelper = new ParkinglotDatabaseHelper(getApplicationContext());
@@ -256,36 +260,41 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
 
         for (int i = 0; i < parkinglotList.size(); i++) {
 
-            String title = parkinglotList.get(i).name;
-            String subTitle = "주차가능대수 : " + parkinglotList.get(i).parkStat;
-            double latitude = parkinglotList.get(i).latitude;
-            double longitude = parkinglotList.get(i).longitude;
+            if (parkinglotList.get(i).resStat == 1) {
+                String title = parkinglotList.get(i).name;
+                String subTitle = "주차가능대수 : " + parkinglotList.get(i).parkStat;
+                resLatitude = parkinglotList.get(i).latitude;
+                resLongitude = parkinglotList.get(i).longitude;
 
-            TMapPoint tMapPoint = new TMapPoint(latitude, longitude);
+                tMapView.setCenterPoint(resLongitude, resLatitude);
 
-            TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
+                TMapPoint tMapPoint = new TMapPoint(resLatitude, resLongitude);
 
-            if (parkinglotList.get(i).parkStat <= 5) {
-                tMapMarkerItem.setIcon(full);
+                TMapMarkerItem tMapMarkerItem = new TMapMarkerItem();
+
+                if (parkinglotList.get(i).parkStat <= 5) {
+                    tMapMarkerItem.setIcon(full);
+                }
+                else if (parkinglotList.get(i).parkStat > 5 && parkinglotList.get(i).parkStat < 20) {
+                    tMapMarkerItem.setIcon(littleLeft);
+                }
+                else {
+                    tMapMarkerItem.setIcon(free);
+                }
+
+                tMapMarkerItem.setPosition(0.5f, 1.0f);
+                tMapMarkerItem.setCalloutRightButtonImage(start);
+                tMapMarkerItem.setTMapPoint(tMapPoint);
+                tMapMarkerItem.setName(title);
+
+                tMapMarkerItem.setCanShowCallout(true);
+                tMapMarkerItem.setCalloutTitle(title);
+                tMapMarkerItem.setCalloutSubTitle(subTitle);
+                tMapMarkerItem.setAutoCalloutVisible(false);
+
+                tMapView.addMarkerItem("reservationMarker", tMapMarkerItem);
+
             }
-            else if (parkinglotList.get(i).parkStat > 5 && parkinglotList.get(i).parkStat < 20) {
-                tMapMarkerItem.setIcon(littleLeft);
-            }
-            else {
-                tMapMarkerItem.setIcon(free);
-            }
-
-            tMapMarkerItem.setPosition(0.5f, 1.0f);
-            tMapMarkerItem.setCalloutRightButtonImage(start);
-            tMapMarkerItem.setTMapPoint(tMapPoint);
-            tMapMarkerItem.setName(title);
-
-            tMapMarkerItem.setCanShowCallout(true);
-            tMapMarkerItem.setCalloutTitle(title);
-            tMapMarkerItem.setCalloutSubTitle(subTitle);
-            tMapMarkerItem.setAutoCalloutVisible(false);
-
-            tMapView.addMarkerItem("parkinglotMarker" + i, tMapMarkerItem);
 
         }
 
@@ -296,7 +305,9 @@ public class MainActivity3 extends AppCompatActivity implements TMapGpsManager.o
         reservationRecyclerAdapter = new ReservationRecyclerAdapter();
 
         for (int i = 0; i < parkinglotList.size(); i++) {
-            reservationRecyclerAdapter.addItems(parkinglotList.get(i));
+            if (parkinglotList.get(i).resStat == 1) {
+                reservationRecyclerAdapter.addItems(parkinglotList.get(i));
+            }
         }
 
         adapter = reservationRecyclerAdapter;

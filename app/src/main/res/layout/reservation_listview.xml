@@ -60,6 +60,33 @@
             android:textColor="@android:color/darker_gray"
             android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/operDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="운영요일"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="결제"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/div"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="행정구역"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp" />
+
     </LinearLayout>
 
 
